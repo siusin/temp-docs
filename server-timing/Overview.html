@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<head><meta property="dc:language" content="en" lang="">
+  <title>Server Timing</title>
+  <meta charset="utf-8">
+
+
+<style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 {
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+.respec-hidden {
+    display: none;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"><style>/* --- EXAMPLES --- */
+div.example-title {
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.example-title span {
+    text-transform: uppercase;
+}
+aside.example, div.example, div.illegal-example {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+div.illegal-example { color: red }
+div.illegal-example p { color: black }
+aside.example, div.example {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;
+}
+
+aside.example div.example {
+    border-left-width: .1em;
+    border-color: #999;
+    background: #fff;
+}
+aside.example div.example div.example-title {
+    color: #999;
+}
+</style><style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title , div.ednote-title, div.warning-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title, div.ednote-title { color: #2b2; }
+div.warning-title { color: #f22; }
+div.issue-title span, div.note-title span, div.ednote-title span, div.warning-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue, div.ednote, div.warning {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .ednote > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
+.issue, .note, .ednote, .warning {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note , div.ednote,  div.warning {
+    padding: 1em 1.2em 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.ednote, span.issue, span.warning { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note, .ednote {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+.warning {
+    border-color: #f11;
+    border-width: .2em;
+    border-style: solid;
+    background: #fbe9e9;
+}
+
+.warning-title:before{
+    content: "⚠"; /*U+26A0 WARNING SIGN*/
+    font-size: 3em;
+    float: left;
+    height: 100%;
+    padding-right: .3em;
+    vertical-align: top;
+    margin-top: -0.5em;
+}
+
+li.task-list-item {
+    list-style: none;
+}
+
+input.task-list-item-checkbox {
+    margin: 0 0.35em 0.25em -1.6em;
+    vertical-align: middle;
+}
+</style><style>/* HIGHLIGHTS */
+code.prettyprint {
+    color:  inherit;
+}
+
+/* this from google-code-prettify */
+.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+</style><style>/* --- WEB IDL --- */
+pre.idl {
+    border-top: 1px solid #90b8de;
+    border-bottom: 1px solid #90b8de;
+    padding:    1em;
+    line-height:    120%;
+}
+
+@media print {
+  pre.idl {
+      white-space: pre-wrap;
+  }
+}
+
+pre.idl::before {
+    content:    "WebIDL";
+    display:    block;
+    width:      150px;
+    background: #90b8de;
+    color:  #fff;
+    font-family:    sans-serif;
+    padding:    3px;
+    font-weight:    bold;
+    margin: -1em 0 1em -1em;
+}
+
+.idlType {
+    color:  #ff4500;
+    font-weight:    bold;
+    text-decoration:    none;
+}
+
+/*.idlModule*/
+/*.idlModuleID*/
+/*.idlInterface*/
+.idlInterfaceID, .idlDictionaryID, .idlCallbackID, .idlEnumID {
+    font-weight:    bold;
+    color:  #005a9c;
+}
+a.idlEnumItem {
+    color:  #000;
+    border-bottom:  1px dotted #ccc;
+    text-decoration: none;
+}
+
+.idlSuperclass {
+    font-style: italic;
+    color:  #005a9c;
+}
+
+/*.idlAttribute*/
+.idlAttrType, .idlFieldType, .idlMemberType {
+    color:  #005a9c;
+}
+.idlAttrName, .idlFieldName, .idlMemberName {
+    color:  #ff4500;
+}
+.idlAttrName a, .idlFieldName a, .idlMemberName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlMethod*/
+.idlMethType, .idlCallbackType {
+    color:  #005a9c;
+}
+.idlMethName {
+    color:  #ff4500;
+}
+.idlMethName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlCtor*/
+.idlCtorName {
+    color:  #ff4500;
+}
+.idlCtorName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlParam*/
+.idlParamType {
+    color:  #005a9c;
+}
+.idlParamName, .idlDefaultValue {
+    font-style: italic;
+}
+
+.extAttr {
+    color:  #666;
+}
+
+/*.idlSectionComment*/
+.idlSectionComment {
+    color: gray;
+}
+
+/*.idlIterable*/
+.idlIterableKeyType, .idlIterableValueType {
+    color:  #005a9c;
+}
+
+/*.idlMaplike*/
+.idlMaplikeKeyType, .idlMaplikeValueType {
+    color:  #005a9c;
+}
+
+/*.idlConst*/
+.idlConstType {
+    color:  #005a9c;
+}
+.idlConstName {
+    color:  #ff4500;
+}
+.idlConstName a {
+    color:  #ff4500;
+    border-bottom:  1px dotted #ff4500;
+    text-decoration: none;
+}
+
+/*.idlException*/
+.idlExceptionID {
+    font-weight:    bold;
+    color:  #c00;
+}
+
+.idlTypedefID, .idlTypedefType {
+    color:  #005a9c;
+}
+
+.idlRaises, .idlRaises a.idlType, .idlRaises a.idlType code, .excName a, .excName a code {
+    color:  #c00;
+    font-weight:    normal;
+}
+
+.excName a {
+    font-family:    monospace;
+}
+
+.idlRaises a.idlType, .excName a.idlType {
+    border-bottom:  1px dotted #c00;
+}
+
+.excGetSetTrue, .excGetSetFalse, .prmNullTrue, .prmNullFalse, .prmOptTrue, .prmOptFalse {
+    width:  45px;
+    text-align: center;
+}
+.excGetSetTrue, .prmNullTrue, .prmOptTrue { color:  #0c0; }
+.excGetSetFalse, .prmNullFalse, .prmOptFalse { color:  #c00; }
+
+.idlImplements a {
+    font-weight:    bold;
+}
+
+dl.attributes, dl.methods, dl.constants, dl.constructors, dl.fields, dl.dictionary-members {
+    margin-left:    2em;
+}
+
+.attributes dt, .methods dt, .constants dt, .constructors dt, .fields dt, .dictionary-members dt {
+    font-weight:    normal;
+}
+
+.attributes dt code, .methods dt code, .constants dt code, .constructors dt code, .fields dt code, .dictionary-members dt code {
+    font-weight:    bold;
+    color:  #000;
+    font-family:    monospace;
+}
+
+.attributes dt code, .fields dt code, .dictionary-members dt code {
+    background:  #ffffd2;
+}
+
+.attributes dt .idlAttrType code, .fields dt .idlFieldType code, .dictionary-members dt .idlMemberType code {
+    color:  #005a9c;
+    background:  transparent;
+    font-family:    inherit;
+    font-weight:    normal;
+    font-style: italic;
+}
+
+.methods dt code {
+    background:  #d9e6f8;
+}
+
+.constants dt code {
+    background:  #ddffd2;
+}
+
+.constructors dt code {
+    background:  #cfc;
+}
+
+.attributes dd, .methods dd, .constants dd, .constructors dd, .fields dd, .dictionary-members dd {
+    margin-bottom:  1em;
+}
+
+table.parameters, table.exceptions {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    margin: 0.5em 0;
+    width:  100%;
+}
+table.parameters { border-bottom:  1px solid #90b8de; }
+table.exceptions { border-bottom:  1px solid #deb890; }
+
+.parameters th, .exceptions th {
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+    font-weight:    normal;
+    text-shadow:    #666 1px 1px 0;
+}
+.parameters th { background: #90b8de; }
+.exceptions th { background: #deb890; }
+
+.parameters td, .exceptions td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.parameters tr:first-child td, .exceptions tr:first-child td {
+    border-top: none;
+}
+
+.parameters td.prmName, .exceptions td.excName, .exceptions td.excCodeName {
+    width:  100px;
+}
+
+.parameters td.prmType {
+    width:  120px;
+}
+
+table.exceptions table {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    width:  100%;
+}
+</style><link href="https://www.w3.org/StyleSheets/TR/2016/W3C-WG-NOTE.css" rel="stylesheet"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><script type="application/json" id="initialUserConfig">{
+  "shortName": "server-timing",
+  "specStatus": "WG-NOTE",
+  "edDraftURI": "https://w3c.github.io/server-timing/",
+  "editors": [
+    {
+      "name": "Ilya Grigorik",
+      "url": "https://www.igvita.com/",
+      "mailto": "igrigorik@gmail.com",
+      "company": "Google",
+      "companyURL": "https://www.google.com/",
+      "w3cid": "56102"
+    }
+  ],
+  "wg": "Web Performance Working Group",
+  "wgURI": "http://www.w3.org/2010/webperf/",
+  "wgPublicList": "public-web-perf",
+  "subjectPrefix": "[Server Timing]",
+  "format": "markdown",
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
+        {
+          "value": "We are on Github.",
+          "href": "https://github.com/w3c/server-timing/"
+        },
+        {
+          "value": "File a bug.",
+          "href": "https://github.com/w3c/server-timing/issues"
+        },
+        {
+          "value": "Commit history.",
+          "href": "https://github.com/w3c/server-timing/commits/gh-pages/index.html"
+        }
+      ]
+    }
+  ],
+  "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/45211/status"
+}</script></head>
+
+<body id="respecDocument" role="document" class="h-entry"><div id="respecHeader" role="contentinfo" class="head">
+  <p>
+            <a class="logo" href="http://www.w3.org/"><img src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C" height="48" width="72"></a>
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Server Timing</h1>
+  <h2 id="w3c-working-group-note-23-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Working Group Note <time property="dcterms:issued" class="dt-published" datetime="2016-05-23">23 May 2016</time></h2>
+  <dl>
+      <dt>This version:</dt>
+      <dd><a class="u-url" href="http://www.w3.org/TR/2016/NOTE-server-timing-20160523/">http://www.w3.org/TR/2016/NOTE-server-timing-20160523/</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR/server-timing/">http://www.w3.org/TR/server-timing/</a></dd>
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="https://w3c.github.io/server-timing/">https://w3c.github.io/server-timing/</a></dd>
+    <dt>Editor:</dt>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="56102"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Ilya Grigorik"><a class="u-url url p-name fn" property="foaf:homepage" href="https://www.igvita.com/">Ilya Grigorik</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="https://www.google.com/">Google</a>, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:igrigorik@gmail.com">igrigorik@gmail.com</a></span></span>
+<span property="rdf:rest" resource="rdf:nil"></span>
+</dd>
+
+          <dt>Repository:</dt>
+                  <dd>
+                    <a href="https://github.com/w3c/server-timing/">
+                      We are on Github.
+                    </a>
+                  </dd>
+                  <dd>
+                    <a href="https://github.com/w3c/server-timing/issues">
+                      File a bug.
+                    </a>
+                  </dd>
+                  <dd>
+                    <a href="https://github.com/w3c/server-timing/commits/gh-pages/index.html">
+                      Commit history.
+                    </a>
+                  </dd>
+  </dl>
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2016
+
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>).
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+            <a rel="license" href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        rules apply.
+      </p>
+  <hr title="Separator for header">
+</div><section property="dc:abstract" class="introductory" id="abstract"><h2 resource="#h-abstract" id="h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2><p>This specification introduces <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing">Server Timing</a>, which enables the server to communicate performance metrics about the request-response cycle to the user agent, and a JavaScript interface to enable applications to collect, process, and act on these metrics to optimize application delivery.</p></section><section id="sotd" class="introductory"><h2 resource="#h-sotd" id="h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
+        <p>
+          <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at http://www.w3.org/TR/.</em>
+        </p>
+          <p class='annoying-warning'>
+This is a <strong>proposal</strong> and may change without any notices. Interested parties should bring discussions to the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a>.
+</p>
+          <p>
+            This document was published by the <a href="http://www.w3.org/2010/webperf/">Web Performance Working Group</a> as a Working Group Note for history purposes.
+              If you wish to make comments regarding this document, please direct them to the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> instead. All comments are welcome.</p>
+              <p> You may find historical discussion in
+              <a href="mailto:public-web-perf@w3.org?subject=%5BServer%20Timing%5D">public-web-perf@w3.org</a>
+              (<a href="http://lists.w3.org/Archives/Public/public-web-perf/">archives</a>)
+                with <code>[Server Timing]</code> at the start of your email's subject.
+
+
+          </p>
+            <p>
+              Publication as a Working Group Note does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+              Membership. This is a draft document and may be updated, replaced or obsoleted by other
+              documents at any time. It is inappropriate to cite this document as other than work in
+              progress.
+            </p>
+          <p>
+              This document was produced by
+              a group
+               operating under the
+              <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+              Policy</a>.
+                <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/45211/status" rel="disclosure">public list of any patent
+                disclosures</a>
+              made in connection with the deliverables of
+              the group; that page also includes
+              instructions for disclosing a patent. An individual who has actual knowledge of a patent
+              which the individual believes contains
+              <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+              Claim(s)</a> must disclose the information in accordance with
+              <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+              6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          </p>
+            <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2015/Process-20150901/">1 September 2015 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+            </p>
+
+</section><nav id="toc"><h2 resource="#table-of-contents" id="table-of-contents" class="introductory"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul role="directory" class="toc"><li class="tocline"><a class="tocxref" href="#introduction"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a class="tocxref" href="#server-timing"><span class="secno">2. </span>Server Timing</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#the-server-timing-header-field"><span class="secno">2.1 </span>The <code>Server-Timing</code> Header Field</a></li><li class="tocline"><a class="tocxref" href="#the-performanceservertiming-interface"><span class="secno">2.2 </span>The <code>PerformanceServerTiming</code> Interface</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#attributes"><span class="secno">2.2.1 </span>Attributes</a></li><li class="tocline"><a class="tocxref" href="#serializer"><span class="secno">2.2.2 </span>Serializer</a></li></ul></li><li class="tocline"><a class="tocxref" href="#extensions-to-the-performance-interface"><span class="secno">2.3 </span>Extensions to the <code>Performance</code> Interface</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#attributes-1"><span class="secno">2.3.1 </span>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods"><span class="secno">2.3.2 </span>Methods</a></li></ul></li></ul></li><li class="tocline"><a class="tocxref" href="#process"><span class="secno">3. </span>Process</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#processing-model"><span class="secno">3.1 </span>Processing Model</a></li><li class="tocline"><a class="tocxref" href="#cross-origin-resources"><span class="secno">3.2 </span>Cross-origin Resources</a></li></ul></li><li class="tocline"><a class="tocxref" href="#privacy-and-security"><span class="secno">4. </span>Privacy and Security</a></li><li class="tocline"><a class="tocxref" href="#iana-considerations"><span class="secno">5. </span>IANA Considerations</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#server-timing-1"><span class="secno">5.1 </span>Server-Timing</a></li></ul></li><li class="tocline"><a class="tocxref" href="#examples"><span class="secno">A. </span>Examples</a><ul class="toc"></ul></li><li class="tocline"><a class="tocxref" href="#use-cases"><span class="secno">B. </span>Use cases</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#server-timing-in-developer-tools"><span class="secno">B.1 </span>Server timing in developer tools</a></li><li class="tocline"><a class="tocxref" href="#server-timing-for-automated-analytics"><span class="secno">B.2 </span>Server timing for automated analytics</a></li><li class="tocline"><a class="tocxref" href="#measuring-request-routing-performance"><span class="secno">B.3 </span>Measuring request routing performance</a></li></ul></li><li class="tocline"><a class="tocxref" href="#acknowledgments"><span class="secno">C. </span>Acknowledgments</a></li><li class="tocline"><a class="tocxref" href="#references"><span class="secno">D. </span>References</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#normative-references"><span class="secno">D.1 </span>Normative references</a></li><li class="tocline"><a class="tocxref" href="#informative-references"><span class="secno">D.2 </span>Informative references</a></li></ul></li></ul></nav><section property="bibo:hasPart" resource="#introduction" typeof="bibo:Chapter" id="introduction" class="informative"><!--OddPage--><h2 resource="#h-introduction" id="h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2><p><em>This section is non-normative.</em></p><p>Accurately measuring performance characteristics of web applications is an important aspect of making web applications faster. [<cite><a href="#bib-NAVIGATION-TIMING-2" class="bibref">NAVIGATION-TIMING-2</a></cite>] and [<cite><a href="#bib-RESOURCE-TIMING" class="bibref">RESOURCE-TIMING</a></cite>] provide detailed request timing information for the document and its resources, which include time when the request was initiated, and various milestones to negotiate the connection and receive the response. However, while the user agent can observe the timing data of the request it has no insight into how or why certain stages of the request-response cycle have taken as much time as they have - e.g. how the request was routed, where the time was spent on the server, and so on.</p><p>This specification introduces <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing">Server Timing</a>, which enables the server to communicate performance metrics about the request-response cycle to the user agent, and a JavaScript interface to enable applications to collect, process, and act on these metrics to optimize application delivery.</p></section><section property="bibo:hasPart" resource="#server-timing" typeof="bibo:Chapter" id="server-timing"><!--OddPage--><h2 resource="#h-server-timing" id="h-server-timing"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Server Timing</span></h2><p><dfn id="dfn-server-timing" data-dfn-type="dfn">Server Timing</dfn> constitutes of two parts: a definition of the <code>Server-Timing</code> header field, which allows the server to communicate performance metrics and descriptions within the response and in a well defined format, and a <code>PerformanceServerTiming</code> interface to allow JavaScript to collect, process, and act on these metrics to optimize application delivery.</p><section property="bibo:hasPart" resource="#the-server-timing-header-field" typeof="bibo:Chapter" id="the-server-timing-header-field"><h3 resource="#h-the-server-timing-header-field" id="h-the-server-timing-header-field"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>The <code>Server-Timing</code> Header Field</span></h3><p>The <dfn id="dfn-server-timing-header-field" data-dfn-type="dfn">Server-Timing header field</dfn> is used to communicate one or more metrics and descriptions for the given request-response cycle. The ABNF (Augmented Backus-Naur Form) syntax for the <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing-header-field">Server-Timing header field</a> is as follows:</p><pre>Server-Timing = "Server-Timing" ":" #server-timing-metric
+
+server-timing-metric   = metric  [ ";" description ]
+metric                 = metric-name [ "=" metric-value ]
+metric-name            = token
+metric-value           = 1*digit [ "." 1*digit ]
+description            = token | quoted-string
+</pre><ul>
+  <li>Each metric <em title="MUST" class="rfc2119">MUST</em> have a name.
+    <ul>
+      <li>Metric names <em title="MAY" class="rfc2119">MAY</em> be repeated.</li>
+      <li>Metric names are defined by the server.</li>
+    </ul>
+  </li>
+  <li>Each metric <em title="MAY" class="rfc2119">MAY</em> have an optional numeric value.</li>
+  <li>Each metric <em title="MAY" class="rfc2119">MAY</em> have an optional description.</li>
+  <li>The user agent <em title="MAY" class="rfc2119">MAY</em> surface provided metrics in any order - i.e. the order of metrics in the HTTP header field is not significant.</li>
+</ul><p>See [<cite><a href="#bib-RFC7230" class="bibref">RFC7230</a></cite>] for definitions of <code>token</code>, <code>digit</code>, and <code>quoted-string</code>.</p><div class="note"><div id="h-note1" role="heading" aria-level="4" class="note-title marker"><span>Note</span></div><div class="">
+  To minimize the HTTP overhead the provided metrics and descriptions should be kept as short as possible - e.g. use abbreviations and omit optional values where possible.
+</div></div><p>  </p><div class="note"><div id="h-note2" role="heading" aria-level="4" class="note-title marker"><span>Note</span></div><div class="">The server and/or any relevant intermediaries are in full control of which metrics are communicated to the user agent and when. For example, access to some metrics may be restricted due to privacy or security reasons - see <a class="sec-ref" href="#privacy-and-security"><span class="secno">4.</span> <span class="sec-title">Privacy and Security</span></a> section.</div></div></section><p></p><section property="bibo:hasPart" resource="#the-performanceservertiming-interface" typeof="bibo:Chapter" id="the-performanceservertiming-interface"><h3 resource="#h-the-performanceservertiming-interface" id="h-the-performanceservertiming-interface"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2 </span>The <code>PerformanceServerTiming</code> Interface</span></h3><p>The <dfn id="dfn-performanceservertiming" data-dfn-type="dfn">PerformanceServerTiming</dfn> interface participates in the [<cite><a href="#bib-PERFORMANCE-TIMELINE-2" class="bibref">PERFORMANCE-TIMELINE-2</a></cite>] and extends the following attributes of the <a href="http://www.w3.org/TR/performance-timeline-2/#performanceentry">PerformanceEntry</a> interface:</p><dl class="attributes">
+  <dt id="widl-ServerEntry-name"><code>name</code></dt>
+  <dd>
+    This attribute <em title="MUST" class="rfc2119">MUST</em> return the <a href="http://www.w3.org/TR/html5/infrastructure.html#resolve-a-url">resolved URL</a> of the requested resource [<cite><a href="#bib-HTML5" class="bibref">HTML5</a></cite>]. This attribute <em title="MUST NOT" class="rfc2119">MUST NOT</em> change even if the <a href="http://www.w3.org/TR/html5/infrastructure.html#fetch">fetch</a> redirected to a different URL.
+  </dd>
+  <dt id="widl-ServerEntry-entryType"><code>entryType</code></dt>
+  <dd>This attribute <em title="MUST" class="rfc2119">MUST</em> return the DOMString "<code>server</code>".</dd>
+  <dt id="widl-ServerEntry-startTime"><code>startTime</code></dt>
+  <dd>This attribute <em title="MUST" class="rfc2119">MUST</em> return value 0.</dd>
+  <dt id="widl-ServerEntry-duration"><code>duration</code></dt>
+  <dd>
+    This attribute <em title="MUST" class="rfc2119">MUST</em> return a <a href="http://www.w3.org/TR/hr-time-2/#domhighrestimestamp">DOMHighResTimeStamp</a> [<cite><a href="#bib-HR-TIME-2" class="bibref">HR-TIME-2</a></cite>] that contains the server-specified metric value, or value 0.
+  </dd>
+</dl><p></p><pre class="idl"><span class="idlInterface" id="idl-def-ServerEntry">interface <span class="idlInterfaceID">ServerEntry</span> : <span class="idlSuperclass">PerformanceEntry</span> {
+<span class="idlAttribute">    readonly        attribute <span class="idlAttrType">DOMString</span> <span class="idlAttrName"><a href="#widl-ServerEntry-metric">metric</a></span>;</span>
+<span class="idlAttribute">    readonly        attribute <span class="idlAttrType">DOMString</span> <span class="idlAttrName"><a href="#widl-ServerEntry-description">description</a></span>;</span>
+<span class="idlSerializer">    serializer = <span class="idlSerializerValues">{inherit, attribute}</span>;</span>
+};</span></pre><section property="bibo:hasPart" resource="#attributes" typeof="bibo:Chapter" id="attributes"><h4 resource="#h-attributes" id="h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-ServerEntry-description"><code>description</code> of type <span class="idlAttrType">DOMString</span>, readonly       </dt><dd>This attribute <em title="MUST" class="rfc2119">MUST</em> return the server-specified metric description, or an empty string.</dd><dt id="widl-ServerEntry-metric"><code>metric</code> of type <span class="idlAttrType">DOMString</span>, readonly       </dt><dd>This attribute <em title="MUST" class="rfc2119">MUST</em> return the server-specified metric name.</dd></dl></section><section property="bibo:hasPart" resource="#serializer" typeof="bibo:Chapter" id="serializer"><h4 resource="#h-serializer" id="h-serializer"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.2 </span>Serializer</span></h4><div><p>Instances of this interface are serialized as a map with entries from the closest inherited interface and with entries for each of the serializable attributes.</p><p></p></div></section></section><p></p><section property="bibo:hasPart" resource="#extensions-to-the-performance-interface" typeof="bibo:Chapter" id="extensions-to-the-performance-interface"><h3 resource="#h-extensions-to-the-performance-interface" id="h-extensions-to-the-performance-interface"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Extensions to the <code>Performance</code> Interface</span></h3><pre class="idl"><span class="idlInterface" id="idl-def-Performance">partial interface <span class="idlInterfaceID">Performance</span> {
+<span class="idlMethod">    <span class="idlMethType">void</span> <span class="idlMethName"><a href="#widl-Performance-clearServerTimings-void">clearServerTimings</a></span> ();</span>
+<span class="idlMethod">    <span class="idlMethType">void</span> <span class="idlMethName"><a href="#widl-Performance-setServerTimingBufferSize-void-unsigned-long-maxSize">setServerTimingBufferSize</a></span> (<span class="idlParam"><span class="idlParamType">unsigned long</span> <span class="idlParamName">maxSize</span></span>);</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType">EventHandler</span> <span class="idlAttrName"><a href="#widl-Performance-onservertimingbufferfull">onservertimingbufferfull</a></span>;</span>
+};</span></pre><section property="bibo:hasPart" resource="#attributes-1" typeof="bibo:Chapter" id="attributes-1"><h4 resource="#h-attributes-1" id="h-attributes-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3.1 </span>Attributes</span></h4><dl class="attributes"><dt id="widl-Performance-onservertimingbufferfull"><code>onservertimingbufferfull</code> of type <span class="idlAttrType">EventHandler</span></dt><dd>The event handler for the <code>servertimingbufferfull</code> event. Immediately after the buffer used to store the list of <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources becomes full, the user agent <em title="MUST" class="rfc2119">MUST</em> fire a simple event named <code>servertimingbufferfull</code> that bubbles, isn't cancelable, has no default action, at the <a href="http://www.w3.org/TR/hr-time-2/#idl-def-Performance">Performance</a> object [<cite><a href="#bib-NAVIGATION-TIMING-2" class="bibref">NAVIGATION-TIMING-2</a></cite>].</dd></dl></section><section property="bibo:hasPart" resource="#methods" typeof="bibo:Chapter" id="methods"><h4 resource="#h-methods" id="h-methods"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3.2 </span>Methods</span></h4><dl class="methods"><dt id="widl-Performance-clearServerTimings-void"><code>clearServerTimings</code></dt><dd>This method clears the buffer used to store the current list of <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources.<div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div></dd><dt id="widl-Performance-setServerTimingBufferSize-void-unsigned-long-maxSize"><code>setServerTimingBufferSize</code></dt><dd>This method, when invoked, <em title="MUST" class="rfc2119">MUST</em> set the maximum number of <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources that may be stored in the buffer to the value of the <code>maxSize</code> parameter. The buffer is considered to be full if the number of entries in it is greater than or equal to <code>maxSize</code>.
+
+  <p>If this method is not called, the user agent <em title="SHOULD" class="rfc2119">SHOULD</em> store at least 150 <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources in the buffer, unless otherwise specified by the user agent.</p>
+
+  <p>If the <code>maxSize</code> parameter is less than the number of elements currently stored in the buffer, no elements in the buffer are to be removed and the user agent <em title="MUST NOT" class="rfc2119">MUST NOT</em> fire the <code>servertimingbufferfull</code> event.</p>
+
+
+  <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc">This parameter sets the maximum number of <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources that will be stored in the buffer.</td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd></dl></section></section></section><section property="bibo:hasPart" resource="#process" typeof="bibo:Chapter" id="process"><!--OddPage--><h2 resource="#h-process" id="h-process"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Process</span></h2><p></p><p></p><section property="bibo:hasPart" resource="#processing-model" typeof="bibo:Chapter" id="processing-model"><h3 resource="#h-processing-model" id="h-processing-model"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.1 </span>Processing Model</span></h3><ol>
+  <li>Once the <a href="http://www.w3.org/TR/html5/browsers.html#create-a-document-object">Window object of the current document is created</a> the user agent <em title="MUST" class="rfc2119">MUST</em> create a <a href="http://www.w3.org/TR/performance-timeline-2/#performanceentrylist">PerformanceEntryList</a> object (<dfn id="dfn-primary-buffer" data-dfn-type="dfn">primary buffer</dfn>) to store the list of <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> resources.</li>
+  <li>Set the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer">primary buffer</a> to a size of 150, unless otherwise specified by the user agent or set by the <a href="#widl-Performance-setServerTimingBufferSize-void-unsigned-long-maxSize">setServerTimingBufferSize</a> method.</li>
+
+  <li>For each server-specified metric received via the <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing-header-field">Server-Timing header field</a> perform the following steps:
+    <ol>
+      <li id="step-create-object">Create a new <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> object and set <a href="#widl-ServerEntry-entryType">entryType</a> to the DOMString   <code>server</code>.</li>
+      <li>Set the <a href="#widl-ServerEntry-name">name</a> to the <a href="http://www.w3.org/TR/html5/infrastructure.html#resolve-a-url">resolved URL</a> of the   requested resource.</li>
+      <li>Set <a href="#widl-ServerEntry-metric">metric</a> to the server-specified metric name.</li>
+      <li>Set <a href="#widl-ServerEntry-duration">duration</a> to the server-specified metric value, or value 0.</li>
+      <li>Set <a href="#widl-ServerEntry-duration">description</a> to the server-specified metric description, or an empty string.</li>
+      <li>Set <a href="#widl-ServerEntry-startTime">startTime</a> to the value 0.</li>
+      <li>If the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer">primary buffer</a> is full, discard the <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> object, created in step 3. Otherwise, add it to the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer">primary buffer</a>  . If adding it causes the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer"> primary buffer</a> to become full, fire the <a href="#widl-Performance-onservertimingbufferfull">servertimingbufferfull</a>   event at the Document.
+        <ol>
+          <li>If the <a href="#widl-Performance-clearServerTimings-void">clearServerTimings</a> method is called in the event handler for the <a href="#widl-Performance-onservertimingbufferfull">servertimingbufferfull</a> event, clear all <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> objects in the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer">primary buffer</a>.</li>
+          <li>If the <a href="#widl-Performance-setServerTimingBufferSize-void-unsigned-long-maxSize">setServerTimingBufferSize</a> method is called in the event     handler for the <a href="#widl-Performance-onservertimingbufferfull">servertimingbufferfull</a> event,
+          set the maximum size of the <a data-link-type="dfn" class="internalDFN" href="#dfn-primary-buffer">primary buffer</a> to the <code>maxSize</code> parameter. If the <code>maxSize</code> parameter is less than the number of elements currently   stored in the buffer, no elements in the buffer are to be removed.</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><p>The user-agent <em title="MUST" class="rfc2119">MUST</em> process <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing-header-field">Server-Timing header field</a> communicated via a trailer field (see [<cite><a href="#bib-RFC7230" class="bibref">RFC7230</a></cite>] section 4.1.2) using the same algorithm.</p></section><section property="bibo:hasPart" resource="#cross-origin-resources" typeof="bibo:Chapter" id="cross-origin-resources"><h3 resource="#h-cross-origin-resources" id="h-cross-origin-resources"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.2 </span>Cross-origin Resources</span></h3><p>Cross-origin resources (i.e. non <a href="https://tools.ietf.org/html/rfc6454#section-5">same origin</a>) <em title="MUST" class="rfc2119">MUST</em> be included as <a data-link-type="dfn" class="internalDFN" href="#dfn-performanceservertiming">PerformanceServerTiming</a> objects in the <a href="http://www.w3.org/TR/performance-timeline-2/#sec-performance-timeline">Performance Timeline</a>. If the "timing allow check" algorithm, as defined in [<cite><a href="#bib-RESOURCE-TIMING" class="bibref">RESOURCE-TIMING</a></cite>], fails for a cross-origin resource:</p><ul>
+  <li>The <a href="#widl-ServerEntry-duration">duration</a> <em title="MUST" class="rfc2119">MUST</em> be set to value 0.</li>
+  <li>The <a href="#widl-ServerEntry-duration">description</a> <em title="MUST" class="rfc2119">MUST</em> be set to an empty string.</li>
+</ul><p>Server must return the <code>Timing-Allow-Origin</code> HTTP response header, as defined in [<cite><a href="#bib-RESOURCE-TIMING" class="bibref">RESOURCE-TIMING</a></cite>], to allow the user agent to fully expose, to the document origin(s) specified, the values of attributes that would have been set to zero or empty string due to the cross-origin restrictions.</p></section></section><section property="bibo:hasPart" resource="#privacy-and-security" typeof="bibo:Chapter" id="privacy-and-security" class="informative"><!--OddPage--><h2 resource="#h-privacy-and-security" id="h-privacy-and-security"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Privacy and Security</span></h2><p><em>This section is non-normative.</em></p><p>The interfaces defined in this specification expose potentially sensitive application and infrastructure information to any web page that has included a resource that advertises server timing metrics. For this reason the access to <code>ServerTiming</code> interface is restricted by the <a href="http://www.w3.org/TR/html5/browsers.html#same-origin">same origin</a> policy by default, as described in <a class="sec-ref" href="#cross-origin-resources"><span class="secno">3.2</span> <span class="sec-title">Cross-origin Resources</span></a>. Resource providers can explicitly allow server timing information to be available by adding the <code>Timing-Allow-Origin</code> HTTP response header, as defined in [<cite><a href="#bib-RESOURCE-TIMING" class="bibref">RESOURCE-TIMING</a></cite>], that species the domains that are allowed to access the server metrics.</p><p>In addition to using the <code>Timing-Allow-Origin</code> HTTP response header, the server can also use relevant logic to control which metrics are returned, when, and to whom - e.g. the server may only provide certain metrics to correctly authenticated users and nothing at all to all others.</p></section><section property="bibo:hasPart" resource="#iana-considerations" typeof="bibo:Chapter" id="iana-considerations"><!--OddPage--><h2 resource="#h-iana-considerations" id="h-iana-considerations"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>IANA Considerations</span></h2><p></p><p></p><p>The permanent message header field registry  should be updated with the following registrations ([<cite><a href="#bib-RFC3864" class="bibref">RFC3864</a></cite>]):</p><section property="bibo:hasPart" resource="#server-timing-1" typeof="bibo:Chapter" id="server-timing-1"><h3 resource="#h-server-timing-1" id="h-server-timing-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Server-Timing</span></h3><dl>
+  <dt>Header field name</dt>
+  <dd>Server-Timing</dd>
+  <dt>Applicable protocol</dt>
+  <dd>http</dd>
+  <dt>Status</dt>
+  <dd>standard</dd>
+  <dt>Author/Change controller</dt>
+  <dd><abbr title="World Wide Web Consortium">W3C</abbr></dd>
+  <dt>Specification document</dt><dd>This specification (See <a data-link-type="dfn" class="internalDFN" href="#dfn-server-timing">Server Timing</a> Header Field)</dd>
+</dl></section></section><section property="bibo:hasPart" resource="#examples" typeof="bibo:Chapter" id="examples" class="appendix informative"><!--OddPage--><h2 resource="#h-examples" id="h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>Examples</span></h2><p><em>This section is non-normative.</em></p><p></p><p></p><section property="bibo:hasPart" resource="" typeof="bibo:Chapter"><div class="example"><div class="example-title marker"><span>Example 1</span></div><pre class="">&gt; GET /resource HTTP/1.1
+&gt; Host: example.com
+
+&lt; HTTP/1.1 200 OK
+&lt; Server-Timing: miss, db=53, app=47.2;
+&lt; Server-Timing: customView, dc;atl
+&lt; Trailer: Server-Timing
+&lt; (... snip response body ...)
+&lt; Server-Timing: total=123.4</pre></div><table class="parameters">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>miss</td><td></td><td></td></tr>
+    <tr><td>dc</td><td></td><td>atl</td></tr>
+    <tr><td>db</td><td>53</td><td></td></tr>
+    <tr><td>app</td><td>47.2</td><td>customView</td></tr>
+    <tr><td>total</td><td>123.4</td><td></td></tr>
+  </tbody>
+</table><p>The above header fields communicates five distinct metrics that illustrate all the possible ways for the server to communicate data to the user agent: metric name only, metric with value, metric with value and description, and metric with description. For example, the above metrics may indicate that for <code>example.com/resource</code> fetch:</p><ol>
+  <li>There was a cache miss.</li>
+  <li>The request was routed through the "atl" datacenter ("dc").</li>
+  <li>The database ("db") time was 53 ms.</li>
+  <li>The application server ("app") took 47.2ms to process "customView" template or function.</li>
+  <li>The total time for the request-response cycle on the server was 123.4ms, which is recorded at the end of the response and delivered via a trailer field.</li>
+</ol><p>The application can collect, process, and act on the provided metrics via the provided JavaScript interface:</p><div class="example"><div class="example-title marker"><span>Example 2</span></div><pre style="" class="highlight prettyprint prettyprinted"><span class="kwd">var</span><span class="pln"> serverMetrics </span><span class="pun">=</span><span class="pln"> window</span><span class="pun">.</span><span class="pln">performance</span><span class="pun">.</span><span class="pln">getEntriesByName</span><span class="pun">(</span><span class="str">'https://example.com/resource.jpg'</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">for</span><span class="pln"> </span><span class="pun">(</span><span class="pln">i </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> i </span><span class="pun">&lt;</span><span class="pln"> serverMetrics</span><span class="pun">.</span><span class="pln">length</span><span class="pun">;</span><span class="pln"> i</span><span class="pun">++)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    entry </span><span class="pun">=</span><span class="pln"> serverMetrics</span><span class="pun">[</span><span class="pln">i</span><span class="pun">];</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">entry </span><span class="pun">==</span><span class="pln"> </span><span class="str">"server"</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="com">// entry.metric, entry.duration, entry.description</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></pre></div></section></section><section property="bibo:hasPart" resource="#use-cases" typeof="bibo:Chapter" id="use-cases" class="appendix informative"><!--OddPage--><h2 resource="#h-use-cases" id="h-use-cases"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>Use cases</span></h2><p><em>This section is non-normative.</em></p><section property="bibo:hasPart" resource="#server-timing-in-developer-tools" typeof="bibo:Chapter" id="server-timing-in-developer-tools"><h3 resource="#h-server-timing-in-developer-tools" id="h-server-timing-in-developer-tools"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Server timing in developer tools</span></h3><p>Server processing time can be a significant fraction of the total request time. For example, a dynamic response may require one or more database queries, cache lookups, API calls, time to process relevant data and render the response, and so on. Similarly, even a static response can be delayed due to overloaded servers, slow caches, or other reasons.</p><p>Today, the user agent developer tools are able to show when the request was initiated, and when the first and last bytes of the response were received. However, there is no visibility into where or how the time was spent on the server, which means that the developer is unable to quickly diagnose if there is a performance bottleneck on the server, and if so, in which component. Today, to answer this question, the developer is required to use different techniques: check the server logs, embed performance data within the response (if possible), use external tools, and so on. This makes identifying and diagnosing performance bottlenecks hard, and in many cases impractical.</p><p>Server Timing defines a standard mechanism that enables the server to communicate relevant performance metrics to the client and allows the client to surface them directly in the developer tools - e.g. the requests can be annotated with server sent metrics to provide insight into where or how the time was spent while generating the response.</p></section><section property="bibo:hasPart" resource="#server-timing-for-automated-analytics" typeof="bibo:Chapter" id="server-timing-for-automated-analytics"><h3 resource="#h-server-timing-for-automated-analytics" id="h-server-timing-for-automated-analytics"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Server timing for automated analytics</span></h3><p>In addition to surfacing server sent performance metrics in the developer tools, a standard JavaScript interface enables analytics tools to automatically collect, process, beacon, and aggregate these metrics for operational and performance analysis.</p></section><section property="bibo:hasPart" resource="#measuring-request-routing-performance" typeof="bibo:Chapter" id="measuring-request-routing-performance"><h3 resource="#h-measuring-request-routing-performance" id="h-measuring-request-routing-performance"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.3 </span>Measuring request routing performance</span></h3><p>Server Timing enables origin servers to communicate performance metrics about where or how time is spent while processing the request. However, the same request and response may also be routed through one or more multiple proxies (e.g. cache servers, load balancers, and so on), each of which may introduce own delays and may want to provide performance metrics into where or how the time is spent.</p><p>For example, a CDN edge node may want to report which data center was being used, if the resource was available in cache, and how long it took to retrieve the response from cache or from the origin server. Further, the same process may be repeated by other proxies, thus allowing full end-to-end visibility into how the request was routed and where the time was spent.</p><p>Similarly, when a Service Worker is active, some or all of the navigation and resource requests may be routed through it. Effectively, an active Service Worker is a local proxy that is able to reroute requests, serve cached responses, synthesize responses, and more. As a result, Server Timing enables Service Worker to report custom performance metrics about how the request was processed: whether it was fetched from server or server from local cache, duration of relevant the processing steps, and so on.</p></section></section><section property="bibo:hasPart" resource="#acknowledgments" typeof="bibo:Chapter" id="acknowledgments" class="appendix"><!--OddPage--><h2 resource="#h-acknowledgments" id="h-acknowledgments"><span property="xhv:role" resource="xhv:heading"><span class="secno">C. </span>Acknowledgments</span></h2><p></p><p></p><p>This document reuses text from the [<cite><a href="#bib-NAVIGATION-TIMING-2" class="bibref">NAVIGATION-TIMING-2</a></cite>], [<cite><a href="#bib-RESOURCE-TIMING" class="bibref">RESOURCE-TIMING</a></cite>], [<cite><a href="#bib-PERFORMANCE-TIMELINE-2" class="bibref">PERFORMANCE-TIMELINE-2</a></cite>], and [<cite><a href="#bib-RFC6797" class="bibref">RFC6797</a></cite>] specifications as permitted by the licenses of those specifications.</p></section><section property="bibo:hasPart" resource="#references" typeof="bibo:Chapter" id="references" class="appendix"><!--OddPage--><h2 resource="#h-references" id="h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">D. </span>References</span></h2><section property="bibo:hasPart" resource="#normative-references" typeof="bibo:Chapter" id="normative-references"><h3 resource="#h-normative-references" id="h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">D.1 </span>Normative references</span></h3><dl resource="" class="bibliography"><dt id="bib-HR-TIME-2">[HR-TIME-2]</dt><dd>Ilya Grigorik; James Simonsen; Jatinder Mann. W3C. <a property="dc:requires" href="http://www.w3.org/TR/hr-time-2/"><cite>High Resolution Time Level 2</cite></a>. 25 February 2016. W3C Working Draft. URL: <a property="dc:requires" href="http://www.w3.org/TR/hr-time-2/">http://www.w3.org/TR/hr-time-2/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd>Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. W3C. <a property="dc:requires" href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a property="dc:requires" href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-NAVIGATION-TIMING-2">[NAVIGATION-TIMING-2]</dt><dd>Tobin Titus; Jatinder Mann; Arvind Jain. W3C. <a property="dc:requires" href="http://www.w3.org/TR/navigation-timing-2/"><cite>Navigation Timing Level 2</cite></a>. 22 April 2016. W3C Working Draft. URL: <a property="dc:requires" href="http://www.w3.org/TR/navigation-timing-2/">http://www.w3.org/TR/navigation-timing-2/</a>
+</dd><dt id="bib-PERFORMANCE-TIMELINE-2">[PERFORMANCE-TIMELINE-2]</dt><dd>Ilya Grigorik. W3C. <a property="dc:requires" href="http://www.w3.org/TR/performance-timeline-2/"><cite>Performance Timeline Level 2</cite></a>. 21 April 2016. W3C Working Draft. URL: <a property="dc:requires" href="http://www.w3.org/TR/performance-timeline-2/">http://www.w3.org/TR/performance-timeline-2/</a>
+</dd><dt id="bib-RESOURCE-TIMING">[RESOURCE-TIMING]</dt><dd>Arvind Jain; Todd Reifsteck; Jatinder Mann; Zhiheng Wang; Anderson Quach. W3C. <a property="dc:requires" href="http://www.w3.org/TR/resource-timing/"><cite>Resource Timing Level 1</cite></a>. 28 April 2016. W3C Working Draft. URL: <a property="dc:requires" href="http://www.w3.org/TR/resource-timing/">http://www.w3.org/TR/resource-timing/</a>
+</dd><dt id="bib-RFC7230">[RFC7230]</dt><dd>R. Fielding, Ed.; J. Reschke, Ed.. IETF. <a property="dc:requires" href="https://tools.ietf.org/html/rfc7230"><cite>Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</cite></a>. June 2014. Proposed Standard. URL: <a property="dc:requires" href="https://tools.ietf.org/html/rfc7230">https://tools.ietf.org/html/rfc7230</a>
+</dd></dl></section><section property="bibo:hasPart" resource="#informative-references" typeof="bibo:Chapter" id="informative-references"><h3 resource="#h-informative-references" id="h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">D.2 </span>Informative references</span></h3><dl resource="" class="bibliography"><dt id="bib-RFC3864">[RFC3864]</dt><dd>G. Klyne; M. Nottingham; J. Mogul. IETF. <a property="dc:references" href="https://tools.ietf.org/html/rfc3864"><cite>Registration Procedures for Message Header Fields</cite></a>. September 2004. Best Current Practice. URL: <a property="dc:references" href="https://tools.ietf.org/html/rfc3864">https://tools.ietf.org/html/rfc3864</a>
+</dd><dt id="bib-RFC6797">[RFC6797]</dt><dd>J. Hodges; C. Jackson; A. Barth. IETF. <a property="dc:references" href="https://tools.ietf.org/html/rfc6797"><cite>HTTP Strict Transport Security (HSTS)</cite></a>. November 2012. Proposed Standard. URL: <a property="dc:references" href="https://tools.ietf.org/html/rfc6797">https://tools.ietf.org/html/rfc6797</a>
+</dd></dl></section></section><p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p><script src="https://www.w3.org/scripts/TR/2016/fixup.js" defer="" async=""></script></body></html>
