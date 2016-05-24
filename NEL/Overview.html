@@ -1,489 +1,278 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
-<head>
-  <meta lang="" property="dc:language" content="en">
+<html lang="en" dir="ltr" typeof="bibo:Document w3p:WD" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<head><meta lang="" property="dc:language" content="en">
   <title>Network Error Logging</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <style>
-    /*
-
-github.com style (c) Vasily Polovnyov <vast@whiteants.net>
-
-*/
-    
-    .hljs {
-      display: block;
-      overflow-x: auto;
-      padding: 0.5em;
-      color: #333;
-      background: #f8f8f8;
-      -webkit-text-size-adjust: none;
-    }
-    
-    .hljs-comment,
-    .diff .hljs-header {
-      color: #998;
-      font-style: italic;
-    }
-    
-    .hljs-keyword,
-    .css .rule .hljs-keyword,
-    .hljs-winutils,
-    .nginx .hljs-title,
-    .hljs-subst,
-    .hljs-request,
-    .hljs-status {
-      color: #333;
-      font-weight: bold;
-    }
-    
-    .hljs-number,
-    .hljs-hexcolor,
-    .ruby .hljs-constant {
-      color: #008080;
-    }
-    
-    .hljs-string,
-    .hljs-tag .hljs-value,
-    .hljs-doctag,
-    .tex .hljs-formula {
-      color: #d14;
-    }
-    
-    .hljs-title,
-    .hljs-id,
-    .scss .hljs-preprocessor {
-      color: #900;
-      font-weight: bold;
-    }
-    
-    .hljs-list .hljs-keyword,
-    .hljs-subst {
-      font-weight: normal;
-    }
-    
-    .hljs-class .hljs-title,
-    .hljs-type,
-    .vhdl .hljs-literal,
-    .tex .hljs-command {
-      color: #458;
-      font-weight: bold;
-    }
-    
-    .hljs-tag,
-    .hljs-tag .hljs-title,
-    .hljs-rule .hljs-property,
-    .django .hljs-tag .hljs-keyword {
-      color: #000080;
-      font-weight: normal;
-    }
-    
-    .hljs-attribute,
-    .hljs-variable,
-    .lisp .hljs-body,
-    .hljs-name {
-      color: #008080;
-    }
-    
-    .hljs-regexp {
-      color: #009926;
-    }
-    
-    .hljs-symbol,
-    .ruby .hljs-symbol .hljs-string,
-    .lisp .hljs-keyword,
-    .clojure .hljs-keyword,
-    .scheme .hljs-keyword,
-    .tex .hljs-special,
-    .hljs-prompt {
-      color: #990073;
-    }
-    
-    .hljs-built_in {
-      color: #0086b3;
-    }
-    
-    .hljs-preprocessor,
-    .hljs-pragma,
-    .hljs-pi,
-    .hljs-doctype,
-    .hljs-shebang,
-    .hljs-cdata {
-      color: #999;
-      font-weight: bold;
-    }
-    
-    .hljs-deletion {
-      background: #fdd;
-    }
-    
-    .hljs-addition {
-      background: #dfd;
-    }
-    
-    .diff .hljs-change {
-      background: #0086b3;
-    }
-    
-    .hljs-chunk {
-      color: #aaa;
-    }
+.reportTypeGroup {
+  margin-top: 1em; padding-top: 1ex;
+  border-top: 1px solid black;
+}
   </style>
-  <style id="respec-mainstyle">
-    /*****************************************************************
+<style>/*****************************************************************
  * ReSpec 3 CSS
  * Robin Berjon - http://berjon.com/
  *****************************************************************/
-    /* Override code highlighter background */
-    
-    .hljs {
-      background: transparent !important;
-    }
-    /* --- INLINES --- */
-    
-    em.rfc2119 {
-      text-transform: lowercase;
-      font-variant: small-caps;
-      font-style: normal;
-      color: #900;
-    }
-    
-    h1 acronym,
-    h2 acronym,
-    h3 acronym,
-    h4 acronym,
-    h5 acronym,
-    h6 acronym,
-    a acronym,
-    h1 abbr,
-    h2 abbr,
-    h3 abbr,
-    h4 abbr,
-    h5 abbr,
-    h6 abbr,
-    a abbr {
-      border: none;
-    }
-    
-    dfn {
-      font-weight: bold;
-    }
-    
-    a.internalDFN {
-      color: inherit;
-      border-bottom: 1px solid #99c;
-      text-decoration: none;
-    }
-    
-    a.externalDFN {
-      color: inherit;
-      border-bottom: 1px dotted #ccc;
-      text-decoration: none;
-    }
-    
-    a.bibref {
-      text-decoration: none;
-    }
-    
-    cite .bibref {
-      font-style: normal;
-    }
-    
-    code {
-      color: #C83500;
-    }
-    /* --- TOC --- */
-    
-    .toc a,
-    .tof a {
-      text-decoration: none;
-    }
-    
-    a .secno,
-    a .figno {
-      color: #000;
-    }
-    
-    ul.tof,
-    ol.tof {
-      list-style: none outside none;
-    }
-    
-    .caption {
-      margin-top: 0.5em;
-      font-style: italic;
-    }
-    /* --- TABLE --- */
-    
-    table.simple {
-      border-spacing: 0;
-      border-collapse: collapse;
-      border-bottom: 3px solid #005a9c;
-    }
-    
-    .simple th {
-      background: #005a9c;
-      color: #fff;
-      padding: 3px 5px;
-      text-align: left;
-    }
-    
-    .simple th[scope="row"] {
-      background: inherit;
-      color: inherit;
-      border-top: 1px solid #ddd;
-    }
-    
-    .simple td {
-      padding: 3px 10px;
-      border-top: 1px solid #ddd;
-    }
-    
-    .simple tr:nth-child(even) {
-      background: #f0f6ff;
-    }
-    /* --- DL --- */
-    
-    .section dd > p:first-child {
-      margin-top: 0;
-    }
-    
-    .section dd > p:last-child {
-      margin-bottom: 0;
-    }
-    
-    .section dd {
-      margin-bottom: 1em;
-    }
-    
-    .section dl.attrs dd,
-    .section dl.eldef dd {
-      margin-bottom: 0;
-    }
-    
-    .respec-hidden {
-      display: none;
-    }
-    
-    @media print {
-      .removeOnSave {
-        display: none;
-      }
-    }
-  </style>
 
-  <style>
-    .reportTypeGroup {
-      margin-top: 1em;
-      padding-top: 1ex;
-      border-top: 1px solid black;
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
     }
-  </style>
-  <style>
-    /* --- EXAMPLES --- */
-    
-    div.example-title {
-      min-width: 7.5em;
-      color: #b9ab2d;
-    }
-    
-    div.example-title span {
-      text-transform: uppercase;
-    }
-    
-    aside.example,
-    div.example,
-    div.illegal-example {
-      padding: 0.5em;
-      margin: 1em 0;
-      position: relative;
-      clear: both;
-    }
-    
-    div.illegal-example {
-      color: red
-    }
-    
-    div.illegal-example p {
-      color: black
-    }
-    
-    aside.example,
-    div.example {
-      padding: .5em;
-      border-left-width: .5em;
-      border-left-style: solid;
-      border-color: #e0cb52;
-      background: #fcfaee;
-    }
-    
-    aside.example div.example {
-      border-left-width: .1em;
-      border-color: #999;
-      background: #fff;
-    }
-    
-    aside.example div.example div.example-title {
-      color: #999;
-    }
-  </style>
-  <style>
-    /* --- ISSUES/NOTES --- */
-    
-    div.issue-title,
-    div.note-title,
-    div.ednote-title,
-    div.warning-title {
-      padding-right: 1em;
-      min-width: 7.5em;
-      color: #b9ab2d;
-    }
-    
-    div.issue-title {
-      color: #e05252;
-    }
-    
-    div.note-title,
-    div.ednote-title {
-      color: #2b2;
-    }
-    
-    div.warning-title {
-      color: #f22;
-    }
-    
-    div.issue-title span,
-    div.note-title span,
-    div.ednote-title span,
-    div.warning-title span {
-      text-transform: uppercase;
-    }
-    
-    div.note,
-    div.issue,
-    div.ednote,
-    div.warning {
-      margin-top: 1em;
-      margin-bottom: 1em;
-    }
-    
-    .note > p:first-child,
-    .ednote > p:first-child,
-    .issue > p:first-child,
-    .warning > p:first-child {
-      margin-top: 0
-    }
-    
-    .issue,
-    .note,
-    .ednote,
-    .warning {
-      padding: .5em;
-      border-left-width: .5em;
-      border-left-style: solid;
-    }
-    
-    div.issue,
-    div.note,
-    div.ednote,
-    div.warning {
-      padding: 1em 1.2em 0.5em;
-      margin: 1em 0;
-      position: relative;
-      clear: both;
-    }
-    
-    span.note,
-    span.ednote,
-    span.issue,
-    span.warning {
-      padding: .1em .5em .15em;
-    }
-    
-    .issue {
-      border-color: #e05252;
-      background: #fbe9e9;
-    }
-    
-    .note,
-    .ednote {
-      border-color: #52e052;
-      background: #e9fbe9;
-    }
-    
-    .warning {
-      border-color: #f11;
-      border-width: .2em;
-      border-style: solid;
-      background: #fbe9e9;
-    }
-    
-    .warning-title:before {
-      content: "⚠";
-      /*U+26A0 WARNING SIGN*/
-      font-size: 3em;
-      float: left;
-      height: 100%;
-      padding-right: .3em;
-      vertical-align: top;
-      margin-top: -0.5em;
-    }
-    
-    li.task-list-item {
-      list-style: none;
-    }
-    
-    input.task-list-item-checkbox {
-      margin: 0 0.35em 0.25em -1.6em;
-      vertical-align: middle;
-    }
-  </style>
-  <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-WG-NOTE.css">
-  <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
-  <script id="initialUserConfig" type="application/json">
+}
+</style><style>/* --- EXAMPLES --- */
+div.example-title {
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.example-title span {
+    text-transform: uppercase;
+}
+aside.example, div.example, div.illegal-example {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+div.illegal-example { color: red }
+div.illegal-example p { color: black }
+aside.example, div.example {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;
+}
+
+aside.example div.example {
+    border-left-width: .1em;
+    border-color: #999;
+    background: #fff;
+}
+aside.example div.example div.example-title {
+    color: #999;
+}
+</style><style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title , div.ednote-title, div.warning-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title, div.ednote-title { color: #2b2; }
+div.warning-title { color: #f22; }
+div.issue-title span, div.note-title span, div.ednote-title span, div.warning-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue, div.ednote, div.warning {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .ednote > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
+.issue, .note, .ednote, .warning {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note , div.ednote,  div.warning {
+    padding: 1em 1.2em 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.ednote, span.issue, span.warning { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note, .ednote {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+.warning {
+    border-color: #f11;
+    border-right-width: .2em;
+    border-top-width: .2em;
+    border-bottom-width: .2em;
+    border-style: solid;
+    background: #fbe9e9;
+}
+
+.warning-title:before{
+    content: "⚠"; /*U+26A0 WARNING SIGN*/
+    font-size: 3em;
+    float: left;
+    height: 100%;
+    padding-right: .3em;
+    vertical-align: top;
+    margin-top: -0.5em;
+}
+
+li.task-list-item {
+    list-style: none;
+}
+
+input.task-list-item-checkbox {
+    margin: 0 0.35em 0.25em -1.6em;
+    vertical-align: middle;
+}
+</style><style>/* HIGHLIGHTS */
+code.prettyprint {
+    color:  inherit;
+}
+
+/* this from google-code-prettify */
+.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-WG-NOTE"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><script id="initialUserConfig" type="application/json">{
+  "shortName": "network-error-logging",
+  "specStatus": "ED",
+  "useExperimentalStyles": true,
+  "edDraftURI": "https://w3c.github.io/network-error-logging/",
+  "editors": [
     {
-      "shortName": "network-error-logging",
-      "specStatus": "WG-NOTE",
-      "useExperimentalStyles": true,
-      "edDraftURI": "https://w3c.github.io/network-error-logging/",
-      "editors": [
-      {
-        "name": "Ilya Grigorik",
-        "url": "https://www.igvita.com/",
-        "mailto": "igrigorik@gmail.com",
-        "company": "Google",
-        "w3cid": "56102"
-      },
-      {
-        "name": "Alois Reitbauer",
-        "mailto": "alois.reitbauer@compuware.com",
-        "company": "Compuware Corp.",
-        "w3cid": "48276"
-      },
-      {
-        "name": "Arvind Jain",
-        "mailto": "arvind@google.com",
-        "company": "Google",
-        "note": "Until January 2015",
-        "w3cid": "45188"
-      },
-      {
-        "name": "Jatinder Mann",
-        "mailto": "jmann@microsoft.com",
-        "company": "Microsoft",
-        "note": "Until February 2014",
-        "w3cid": "44357"
-      }],
-      "wg": "Web Performance Working Group",
-      "wgURI": "http://www.w3.org/2010/webperf/",
-      "wgPublicList": "public-web-perf",
-      "format": "markdown",
-      "noLegacyStyle": true,
-      "otherLinks": [
-      {
-        "key": "Repository",
-        "data": [
+      "name": "Ilya Grigorik",
+      "url": "https://www.igvita.com/",
+      "mailto": "igrigorik@gmail.com",
+      "company": "Google",
+      "w3cid": "56102"
+    },
+    {
+      "name": "Alois Reitbauer",
+      "mailto": "alois.reitbauer@compuware.com",
+      "company": "Compuware Corp.",
+      "w3cid": "48276"
+    },
+    {
+      "name": "Arvind Jain",
+      "mailto": "arvind@google.com",
+      "company": "Google",
+      "note": "Until January 2015",
+      "w3cid": "45188"
+    },
+    {
+      "name": "Jatinder Mann",
+      "mailto": "jmann@microsoft.com",
+      "company": "Microsoft",
+      "note": "Until February 2014",
+      "w3cid": "44357"
+    }
+  ],
+  "wg": "Web Performance Working Group",
+  "wgURI": "http://www.w3.org/2010/webperf/",
+  "wgPublicList": "public-web-perf",
+  "format": "markdown",
+  "noLegacyStyle": true,
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
         {
           "value": "We are on Github.",
           "href": "https://github.com/w3c/network-error-logging/"
@@ -495,96 +284,141 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         {
           "value": "Commit history.",
           "href": "https://github.com/w3c/network-error-logging/commits/gh-pages/index.html"
-        }]
-      },
-      {
-        "key": "Mailing list",
-        "data": [
+        }
+      ]
+    },
+    {
+      "key": "Mailing list",
+      "data": [
         {
           "value": "public-web-perf@w3.org",
           "href": "https://lists.w3.org/Archives/Public/public-web-perf/"
-        }]
-      }],
-      "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/45211/status"
+        }
+      ]
     }
-  </script>
-</head>
+  ],
+  "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/45211/status"
+}</script></head>
 
-<body class="h-entry toc-inline" role="document" id="respecDocument">
-  <div class="head" role="contentinfo" id="respecHeader">
-    <p>
-      <a class="logo" href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
-    </p>
-    <h1 class="title p-name" id="title" property="dcterms:title">Network Error Logging</h1>
-    <h2 id="w3c-working-group-note-24-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Working Group Note <time property="dcterms:issued" class="dt-published" datetime="2016-05-24">24 May 2016</time></h2>
-    <dl>
+<body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <p>
+  <a class="logo" href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a> 
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Network Error Logging</h1>
+  
+   <h2 id="w3c-working-group-note-24-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Working Group Note <time property="dcterms:issued" class="dt-published" datetime="2016-05-24">24 May 2016</time></h2>
+  <dl>
+    
       <dt>This version:</dt>
       <dd><a class="u-url" href="http://www.w3.org/TR/2016/NOTE-network-error-logging-20160524/">http://www.w3.org/TR/2016/NOTE-network-error-logging-20160524/</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR/network-error-logging/">http://www.w3.org/TR/network-error-logging/</a></dd>
+    
+    
       <dt>Latest editor's draft:</dt>
       <dd><a href="https://w3c.github.io/network-error-logging/">https://w3c.github.io/network-error-logging/</a></dd>
+    
+    
+    
+    
+    
+    
       <dt>Previous version:</dt>
       <dd><a rel="dcterms:replaces" href="http://www.w3.org/TR/2016/WD-network-error-logging-20160225/">http://www.w3.org/TR/2016/WD-network-error-logging-20160225/</a></dd>
-      <dt>Editors:</dt>
-      <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="56102"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Ilya Grigorik"><a class="u-url url p-name fn" property="foaf:homepage" href="https://www.igvita.com/">Ilya Grigorik</a>, Google, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:igrigorik@gmail.com">igrigorik@gmail.com</a></span></span>
-        <span property="rdf:rest" resource="_:editor1"></span>
-      </dd>
-      <dd class="p-author h-card vcard" resource="_:editor1" data-editor-id="48276"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Alois Reitbauer</span>, Compuware Corp., <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:alois.reitbauer@compuware.com">alois.reitbauer@compuware.com</a></span></span>
-        <span property="rdf:rest" resource="_:editor2"></span>
-      </dd>
-      <dd class="p-author h-card vcard" resource="_:editor2" data-editor-id="45188"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Arvind Jain</span>, Google, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:arvind@google.com">arvind@google.com</a></span> (Until January 2015)</span>
-        <span property="rdf:rest" resource="_:editor3"></span>
-      </dd>
-      <dd class="p-author h-card vcard" resource="_:editor3" data-editor-id="44357"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jatinder Mann</span>, Microsoft, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:jmann@microsoft.com">jmann@microsoft.com</a></span> (Until February 2014)</span>
-        <span property="rdf:rest" resource="rdf:nil"></span>
-      </dd>
+    
+    
+    <dt>Editors:</dt>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="56102"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Ilya Grigorik"><a class="u-url url p-name fn" property="foaf:homepage" href="https://www.igvita.com/">Ilya Grigorik</a>, Google, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:igrigorik@gmail.com">igrigorik@gmail.com</a></span></span>
+<span property="rdf:rest" resource="_:editor1"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor1" data-editor-id="48276"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Alois Reitbauer</span>, Compuware Corp., <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:alois.reitbauer@compuware.com">alois.reitbauer@compuware.com</a></span></span>
+<span property="rdf:rest" resource="_:editor2"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor2" data-editor-id="45188"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Arvind Jain</span>, Google, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:arvind@google.com">arvind@google.com</a></span> (Until January 2015)</span>
+<span property="rdf:rest" resource="_:editor3"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor3" data-editor-id="44357"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jatinder Mann</span>, Microsoft, <span class="ed_mailto"><a class="u-email email" property="foaf:mbox" href="mailto:jmann@microsoft.com">jmann@microsoft.com</a></span> (Until February 2014)</span>
+<span property="rdf:rest" resource="rdf:nil"></span>
+</dd>
 
-      <dt>Repository:</dt>
-      <dd>
-        <a href="https://github.com/w3c/network-error-logging/">
+    
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/network-error-logging/">
                       We are on Github.
                     </a>
-      </dd>
-      <dd>
-        <a href="https://github.com/w3c/network-error-logging/issues">
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/network-error-logging/issues">
                       File a bug.
                     </a>
-      </dd>
-      <dd>
-        <a href="https://github.com/w3c/network-error-logging/commits/gh-pages/index.html">
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/network-error-logging/commits/gh-pages/index.html">
                       Commit history.
                     </a>
-      </dd>
-      <dt>Mailing list:</dt>
-      <dd>
-        <a href="https://lists.w3.org/Archives/Public/public-web-perf/">
+                  </dd>
+                
+             
+          
+        
+      
+        
+          <dt>Mailing list:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://lists.w3.org/Archives/Public/public-web-perf/">
                       public-web-perf@w3.org
                     </a>
-      </dd>
-    </dl>
-    <p class="copyright">
+                  </dd>
+                
+             
+          
+        
+      
+    
+  </dl>
+  
+  
+  
+  
+    
+      <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
         2016
-
+        
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
         <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>).
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). 
+        
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        
+          
             <a rel="license" href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+          
+        
         rules apply.
       </p>
+    
+  
   <hr title="Separator for header">
-  </div>
-
-  <section id="abstract" class="introductory" property="dc:abstract">
-    <h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
-    <p>This document defines a mechanism that enables developers to declare a network error reporting policy for a web application. A user agent can use this policy to report encountered network errors that prevented it from successfully fetching requested resources.</p>
-  </section>
-
-  <section id="sotd" class="introductory">
+</div><section id="abstract" class="introductory" property="dc:abstract"><h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2><p>This document defines a mechanism that enables developers to declare a network error reporting policy for a web application. A user agent can use this policy to report encountered network errors that prevented it from successfully fetching requested resources.</p></section><section id="sotd" class="introductory">
     <h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
     <p>
           <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at http://www.w3.org/TR/.</em>
@@ -628,528 +462,299 @@ This is a <strong>proposal</strong> and may change without any notices. Interest
             <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2015/Process-20150901/">1 September 2015 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
             </p>
 
-  </section>
-  <nav id="toc">
-    <h2 class="introductory" id="table-of-contents" resource="#table-of-contents"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2>
-    <ul class="toc" role="directory">
-      <li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li>
-      <li class="tocline"><a href="#network-error-logging" class="tocxref"><span class="secno">2. </span>Network Error Logging</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#key-concepts-and-terminology" class="tocxref"><span class="secno">2.1 </span>Key Concepts and Terminology</a></li>
-          <li class="tocline"><a href="#policy-delivery-and-processing" class="tocxref"><span class="secno">2.2 </span>Policy Delivery and Processing</a>
-            <ul class="toc">
-              <li class="tocline"><a href="#nel-header-field" class="tocxref"><span class="secno">2.2.1 </span><code>NEL</code> Header Field</a>
-                <ul class="toc">
-                  <li class="tocline"><a href="#the-report-uri-directive" class="tocxref"><span class="secno">2.2.1.1 </span>The <code>report-uri</code> Directive</a></li>
-                  <li class="tocline"><a href="#the-max-age-directive" class="tocxref"><span class="secno">2.2.1.2 </span>The <code>max-age</code> Directive</a></li>
-                  <li class="tocline"><a href="#the-includesubdomains-directive" class="tocxref"><span class="secno">2.2.1.3 </span>The <code>includeSubDomains</code> Directive</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li class="tocline"><a href="#policy-storage-and-maintenance" class="tocxref"><span class="secno">2.3 </span>Policy Storage and Maintenance</a></li>
-          <li class="tocline"><a href="#reporting" class="tocxref"><span class="secno">2.4 </span>Reporting</a></li>
-          <li class="tocline"><a href="#examples" class="tocxref"><span class="secno">2.5 </span>Examples</a>
-            <ul class="toc">
-              <li class="tocline"><a href="#sample-policy-definitions" class="tocxref"><span class="secno">2.5.1 </span>Sample Policy Definitions</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li>
-          <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
+  </section><nav id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#network-error-logging" class="tocxref"><span class="secno">2. </span>Network Error Logging</a><ul class="toc"><li class="tocline"><a href="#key-concepts-and-terminology" class="tocxref"><span class="secno">2.1 </span>Key Concepts and Terminology</a></li><li class="tocline"><a href="#policy-delivery-and-processing" class="tocxref"><span class="secno">2.2 </span>Policy Delivery and Processing</a><ul class="toc"><li class="tocline"><a href="#nel-header-field" class="tocxref"><span class="secno">2.2.1 </span><code>NEL</code> Header Field</a><ul class="toc"><li class="tocline"><a href="#the-report-uri-directive" class="tocxref"><span class="secno">2.2.1.1 </span>The <code>report-uri</code> Directive</a></li><li class="tocline"><a href="#the-max-age-directive" class="tocxref"><span class="secno">2.2.1.2 </span>The <code>max-age</code> Directive</a></li><li class="tocline"><a href="#the-includesubdomains-directive" class="tocxref"><span class="secno">2.2.1.3 </span>The <code>includeSubDomains</code> Directive</a></li></ul></li></ul></li><li class="tocline"><a href="#policy-storage-and-maintenance" class="tocxref"><span class="secno">2.3 </span>Policy Storage and Maintenance</a></li><li class="tocline"><a href="#reporting" class="tocxref"><span class="secno">2.4 </span>Reporting</a></li><li class="tocline"><a href="#examples" class="tocxref"><span class="secno">2.5 </span>Examples</a><ul class="toc"><li class="tocline"><a href="#sample-policy-definitions" class="tocxref"><span class="secno">2.5.1 </span>Sample Policy Definitions</a></li><li class="tocline"><a href="#sample-network-error-reports" class="tocxref"><span class="secno">2.5.2 </span>Sample Network Error Reports</a></li></ul></li><li class="tocline"><a href="#use-cases" class="tocxref"><span class="secno">2.6 </span>Use cases</a><ul class="toc"><li class="tocline"><a href="#reporting-of-navigation-failures" class="tocxref"><span class="secno">2.6.1 </span>Reporting of Navigation Failures</a></li><li class="tocline"><a href="#reporting-of-first-party-subresource-fetch-failures" class="tocxref"><span class="secno">2.6.2 </span>Reporting of First-party Subresource Fetch Failures</a></li><li class="tocline"><a href="#reporting-of-third-party-subresource-fetch-failures" class="tocxref"><span class="secno">2.6.3 </span>Reporting of Third-party Subresource Fetch Failures</a></li></ul></li><li class="tocline"><a href="#privacy-considerations" class="tocxref"><span class="secno">2.7 </span>Privacy Considerations</a></li><li class="tocline"><a href="#iana-considerations" class="tocxref"><span class="secno">2.8 </span>IANA Considerations</a><ul class="toc"><li class="tocline"><a href="#nel" class="tocxref"><span class="secno">2.8.1 </span>NEL</a></li></ul></li></ul></li><li class="tocline"><a href="#acknowledgments" class="tocxref"><span class="secno">A. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">B. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">B.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">B.2 </span>Informative references</a></li></ul></li></ul></nav><section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart"><!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2><p>Accurately measuring performance characteristics of web applications is an important aspect in helping site developers understand how to improve their web applications. The worst case scenario is the failure to load the application, or a particular resource, due to a network error, and to address such failures the developer requires assistance from the user agent to identify when, where, and why such failures are occurring.</p><p>Today, application developers do not have real-time web application availability data from their end users. For example, if the user fails to load the page due to a network error, such as a failed DNS lookup, a connection timeout, a reset connection, or other reasons, the site developer is unable to detect and address this issue. Existing methods, such as synthetic monitoring provide a partial solution by placing monitoring nodes in predetermined geographic locations, but require additional infrastructure investments, and cannot provide truly global and near real-time availability data for real end users.</p><p>Network Error Logging (<dfn data-dfn-type="dfn" id="dfn-nel">NEL</dfn>) addresses this need by defining a mechanism enabling web applications to declare a reporting policy that can be used by the user agent to report network errors for a given origin. To take advantage of <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a>, a web application opts into using <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a> by supplying a <code>NEL</code> HTTP response header field that describes the reporting policy. Then, if the <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a> policy is available for a given origin, and an end user fails to successfully fetch a resource from that origin, the user agent logs the network error report and attempts to deliver it to the report URL defined by the policy - the delivery is done on a best effort basis and might be delayed due to connectivity issues or other reasons.</p><p>For example, if the user agent fails to fetch a resource from <code>https://www.example.com</code> due to an aborted TCP connection, the user agent would notify the report URL defined by the NEL policy associated with that origin, by delivering the following report:</p><pre class="highlight prettyprint prettyprinted" style=""><span class="pun">{</span><span class="pln">
+</span><span class="str">"nel-report"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln">
+    </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"uri"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"https://www.example.com/resource"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"referrer"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"https://referrer.com/"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"server-ip"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"123.122.121.120"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"elapsed-time"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">321</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"age"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"type"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"tcp.aborted"</span><span class="pln">
+    </span><span class="pun">}</span><span class="pln">
+  </span><span class="pun">]</span><span class="pln">
+</span><span class="pun">}</span></pre><p>See <a href="#reporting">reporting</a> for explanation of the communicated fields and format of the report, and <a href="#examples">examples</a> for more hands-on examples of NEL registration and reporting process.</p></section><section id="network-error-logging" typeof="bibo:Chapter" resource="#network-error-logging" property="bibo:hasPart"><!--OddPage--><h2 id="h-network-error-logging" resource="#h-network-error-logging"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Network Error Logging</span></h2><section id="key-concepts-and-terminology" typeof="bibo:Chapter" resource="#key-concepts-and-terminology" property="bibo:hasPart"><h3 id="h-key-concepts-and-terminology" resource="#h-key-concepts-and-terminology"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>Key Concepts and Terminology</span></h3><dl>
+  <dt><dfn data-dfn-type="dfn" id="dfn-origin">origin</dfn></dt>
+  <dd>Defined by the Origin specification. [<cite><a class="bibref" href="#bib-RFC6454">RFC6454</a></cite>]</dd>
+  <dt><dfn data-dfn-type="dfn" id="dfn-json-object">JSON object</dfn></dt>
+  <dt><dfn data-dfn-type="dfn" id="dfn-json-stringification">JSON stringification</dfn></dt>
+  <dd>Defined in the JSON specification. [<cite><a class="bibref" href="#bib-RFC7159">RFC7159</a></cite>]</dd>
+  <dt><dfn data-dfn-type="dfn" id="dfn-url">URL</dfn></dt>
+  <dd>Defined by [<cite><a class="bibref" href="#bib-URL">URL</a></cite>].</dd>
+</dl></section><section id="policy-delivery-and-processing" typeof="bibo:Chapter" resource="#policy-delivery-and-processing" property="bibo:hasPart"><h3 id="h-policy-delivery-and-processing" resource="#h-policy-delivery-and-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2 </span>Policy Delivery and Processing</span></h3><p>The server delivers the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> to the user agent via an HTTP response header field (<a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>). If the result of executing <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">is-origin-trusworthy</a> algorithm ([<cite><a class="bibref" href="#bib-POWERFUL-FEATURES">POWERFUL-FEATURES</a></cite>]) on <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> that served the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> is <code>Potentially Trustworthy</code> then the user agent <em class="rfc2119" title="MUST">MUST</em> either:</p><ul>
+  <li>Register the host as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> if it is not already registered.</li>
+  <li>Update the registered policy for the <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> if the provided policy is different than that already stored by the user agent.</li>
+</ul><p>Otherwise, if the result of the algorithm is <strong>not</strong> <code>Potentionally Trustworthy</code>, then the user <em class="rfc2119" title="MUST">MUST</em> ignore the provided <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>.</p><section id="nel-header-field" typeof="bibo:Chapter" resource="#nel-header-field" property="bibo:hasPart"><h4 id="h-nel-header-field" resource="#h-nel-header-field"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1 </span><code>NEL</code> Header Field</span></h4><p>The <dfn data-dfn-type="dfn" id="dfn-nel-header-field">NEL header field</dfn> is used to communicate the <dfn data-dfn-type="dfn" id="dfn-nel-policy">NEL policy</dfn> to the user agent. The ABNF (Augmented Backus-Naur Form) syntax for the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> is as follows:</p><pre>NEL = "NEL" ":" [ directive ]  *( ";" [ directive ] )
 
-  <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
-    <p>Accurately measuring performance characteristics of web applications is an important aspect in helping site developers understand how to improve their web applications. The worst case scenario is the failure to load the application, or a particular resource, due to a network error, and to address such failures the developer requires assistance from the user agent to identify when, where, and why such failures are occurring.</p>
-    <p>Today, application developers do not have real-time web application availability data from their end users. For example, if the user fails to load the page due to a network error, such as a failed DNS lookup, a connection timeout, a reset connection, or other reasons, the site developer is unable to detect and address this issue. Existing methods, such as synthetic monitoring provide a partial solution by placing monitoring nodes in predetermined geographic locations, but require additional infrastructure investments, and cannot provide truly global and near real-time availability data for real end users.</p>
-    <p>Network Error Logging (<dfn data-dfn-type="dfn" id="dfn-nel">NEL</dfn>) addresses this need by defining a mechanism enabling web applications to declare a reporting policy that can be used by the user agent to report network errors for a given origin. To take advantage of <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a>, a web application opts into using <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a> by supplying a <code>NEL</code> HTTP response header field that describes the reporting policy. Then, if the <a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a> policy is available for a given origin, and an end user fails to successfully fetch a resource from that origin, the user agent logs the network error report and attempts to deliver it to the report URL defined by the policy - the delivery is done on a best effort basis and might be delayed due to connectivity issues or other reasons.</p>
-    <p>For example, if the user agent fails to fetch a resource from <code><a href="https://www.example.com">https://www.example.com</a></code> due to an aborted TCP connection, the user agent would notify the report URL defined by the NEL policy associated with that origin, by delivering the following report:</p><pre class="highlight hljs json">{
-      "<span class="hljs-attribute">nel-report</span>": <span class="hljs-value">[
-          {
-            "<span class="hljs-attribute">uri</span>": <span class="hljs-value"><span class="hljs-string">"</span></span></span><a href="https://www.example.com/resource"><span class="hljs-value"><span class="hljs-value"><span class="hljs-string">https://www.example.com/resource</span></span></span></a><span class="hljs-value"><span class="hljs-value"><span class="hljs-string">"</span></span>,
-            "<span class="hljs-attribute">referrer</span>": <span class="hljs-value"><span class="hljs-string">"</span></span></span><a href="https://referrer.com/"><span class="hljs-value"><span class="hljs-value"><span class="hljs-string">https://referrer.com/</span></span></span></a><span class="hljs-value"><span class="hljs-value"><span class="hljs-string">"</span></span>,
-            "<span class="hljs-attribute">server-ip</span>": <span class="hljs-value"><span class="hljs-string">"123.122.121.120"</span></span>,
-            "<span class="hljs-attribute">elapsed-time</span>": <span class="hljs-value"><span class="hljs-number">321</span></span>,
-            "<span class="hljs-attribute">age</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
-            "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"tcp.aborted"</span>
-          </span>}
-        ]
-    </span>}
-    </pre>
-    <p>See <a href="#reporting">reporting</a> for explanation of the communicated fields and format of the report, and <a href="#examples">examples</a> for more hands-on examples of NEL registration and reporting process.</p>
-  </section>
+directive                 = directive-name [ "=" directive-value ]
+directive-name            = token
+directive-value           = token | quoted-string
+  </pre><p>See [<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>] section 3.2.6 for definitions of <code>token</code> and <code>quoted-string</code>. This specification defines three NEL directives: <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a>, <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a>, and <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a>. The overall requirements for directives are:</p><ul>
+    <li>Directive may be optional or required.</li>
+    <li>Directive names are case-insensitive.</li>
+    <li>Directive order is not significant.</li>
+    <li>Directive should be specified once.</li>
+  </ul><p>User agents <em class="rfc2119" title="MUST">MUST</em> ignore any unknown or invalid directive(s), or other header field value data, that does not conform to the syntax defined in this specification. A valid <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> <em class="rfc2119" title="MUST">MUST</em>, at a minimum, contain all of the "<em class="rfc2119" title="REQUIRED">REQUIRED</em>" directives defined in this specification.</p><ul>
+    <li>If a directive is specified multiple times within the same <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>, the user agent <em class="rfc2119" title="MUST">MUST</em> process the first declaration and ignore the rest.</li>
+    <li>If multiple valid <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>'s are present, the user agent <em class="rfc2119" title="MUST">MUST</em> process the first valid header field and ignore the rest.</li>
+  </ul><p>The user agent <em class="rfc2119" title="MUST">MUST</em> ignore the NEL header specified via a <code>meta</code> element to mitigate hijacking of error reporting via scripting attacks. The <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> <em class="rfc2119" title="MUST">MUST</em> be delivered via the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>.</p><div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note1"><span>Note</span></div><p class="">The restriction on <code>meta</code> element is consistent with [<cite><a class="bibref" href="#bib-CSP">CSP</a></cite>] specification, which restricts reporting registration to HTTP header fields only for same reasons.</p></div><section id="the-report-uri-directive" typeof="bibo:Chapter" resource="#the-report-uri-directive" property="bibo:hasPart"><h5 id="h-the-report-uri-directive" resource="#h-the-report-uri-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.1 </span>The <code>report-uri</code> Directive</span></h5><p>The <dfn data-dfn-type="dfn" id="dfn-report-uri">report-uri</dfn> directive specifies a URL to which the user agent sends reports about network errors. The <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> directive is a <em class="rfc2119" title="REQUIRED">REQUIRED</em> field to register an <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, and <em class="rfc2119" title="OPTIONAL">OPTIONAL</em> if the intent is to remove a previous registration - see <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a>. The ABNF grammar for the name and value of the directive is:</p><pre>directive-name    = "report-uri"
+directive-value   = 1*absolute-URI
+    </pre><p>The <dfn data-dfn-type="dfn" id="dfn-set-of-report-urls">set of report URLs</dfn> is the value of the <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> directive, which contains one or more <code>absolute-URI</code>'s - see [<cite><a class="bibref" href="#bib-RFC3986">RFC3986</a></cite>] section 4.3. Each <code>absolute-URI</code> value <em class="rfc2119" title="SHOULD">SHOULD</em> be delimited within double-quotes.</p><p>The result of executing the <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">is-origin-trustworthy</a> algorithm on origin of each <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the provided <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a> <em class="rfc2119" title="MUST">MUST</em> return <code>Potentially Trustworthy</code>. <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">Report URL's</a> that fail this criteria <em class="rfc2119" title="MUST">MUST</em> be ignored by the user agent. The process of sending network error reports to the specified URL's in this directive's value is defined in this documents <a href="#reporting" class="sec-ref"><span class="secno">2.4</span> <span class="sec-title">Reporting</span></a> section.</p><div class="note"><div class="note-title" aria-level="6" role="heading" id="h-note2"><span>Note</span></div><p class="">To improve delivery of NEL reports the application should set <code>report-uri</code> to an alternative origin whose infrastructure is not coupled with the origin from which the resource is being fetched — otherwise network errors cannot be reported until the problem is solved, if ever — and provide multiple <code>report-uri</code>'s to provide fallback alternatives if the preceding <code>report-uri</code> is unreachable.</p></div></section><section id="the-max-age-directive" typeof="bibo:Chapter" resource="#the-max-age-directive" property="bibo:hasPart"><h5 id="h-the-max-age-directive" resource="#h-the-max-age-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.2 </span>The <code>max-age</code> Directive</span></h5><p>The <em class="rfc2119" title="REQUIRED">REQUIRED</em> <dfn data-dfn-type="dfn" id="dfn-max-age">max-age</dfn> directive specifies the number of seconds, after the reception of the NEL header field, during which the user agent regards the host (from whom the policy was received) as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>. The ABNF grammar for the name and value of the directive is:</p><pre>directive-name    = "max-age"
+directive-value   = delta-seconds
+    </pre><p>See [<cite><a class="bibref" href="#bib-RFC7234">RFC7234</a></cite>] section 1.2.1 for definition of <code>delta-seconds</code>. A <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> value of zero (i.e. "max-age=0") signals the user agent to cease regarding the host as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>, including the <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> directive if provided.</p></section><section id="the-includesubdomains-directive" typeof="bibo:Chapter" resource="#the-includesubdomains-directive" property="bibo:hasPart"><h5 id="h-the-includesubdomains-directive" resource="#h-the-includesubdomains-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.3 </span>The <code>includeSubDomains</code> Directive</span></h5><p>The <em class="rfc2119" title="OPTIONAL">OPTIONAL</em> <dfn data-dfn-type="dfn" id="dfn-includesubdomains">includeSubDomains</dfn> directive is a valueless directive that, if present, signals the user agent that the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> applies not only to the <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> that served the <a href="https://tools.ietf.org/html/rfc7231#section-3">resource representation</a>, but also to any <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> whose <a href="https://url.spec.whatwg.org/#concept-url-host">host</a> component is a subdomain of the <a href="https://url.spec.whatwg.org/#concept-url-host">host</a> component of the <a href="https://tools.ietf.org/html/rfc7231#section-3">resource representation</a>’s <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p></section></section></section><section id="policy-storage-and-maintenance" typeof="bibo:Chapter" resource="#policy-storage-and-maintenance" property="bibo:hasPart"><h3 id="h-policy-storage-and-maintenance" resource="#h-policy-storage-and-maintenance"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Policy Storage and Maintenance</span></h3><p>An HTTP host declares itself an <dfn data-dfn-type="dfn" id="dfn-nel-origin">NEL origin</dfn> by issuing an <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, which is communicated via the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> from a <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy"><code>Potentially Trustworthy</code> origin</a>. Upon error-free receipt and processing of this header by a conformant user agent, the user agent regards the host as a <dfn data-dfn-type="dfn" id="dfn-known-nel-origin">known NEL origin</dfn>.</p><p>The user agent <em class="rfc2119" title="MUST">MUST</em> maintain the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> of any given <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> separately from any NEL policies issued by any other <a data-lt="NEL origin" href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origins</a>. Only the given <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> can update or cause deletion of its <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>. This is accomplished by sending a <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> to the user agent with new values for the policy <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a>, <a data-lt="max-age" href="#dfn-max-age" class="internalDFN" data-link-type="dfn">time duration</a>, and <a data-lt="includeSubDomains" href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">subdomain applicability</a>. Thus, the user agent <em class="rfc2119" title="MUST">MUST</em> store the "freshest" <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> information on behalf of an <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>, and specifying a zero time duration <em class="rfc2119" title="MUST">MUST</em> cause the user agent to delete the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> (including any asserted <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> directive) for that <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>.</p></section><section id="reporting" typeof="bibo:Chapter" resource="#reporting" property="bibo:hasPart"><h3 id="h-reporting" resource="#h-reporting"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4 </span>Reporting</span></h3><p>A <dfn data-dfn-type="dfn" id="dfn-network-error">network error</dfn> is any condition where a connection or a  protocol error is encountered by the user agent, thus preventing it from successfully completing the request-response exchange. This may include, but is not limited to DNS, TCP, TLS, and HTTP connection and protocol errors. For example, a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> is triggered when the user agent:</p><ul>
+  <li>Fails to resolve the DNS name</li>
+  <li>Fails to establish a TCP connection</li>
+  <li>Fails to establish a secure TLS tunnel</li>
+  <li>Fails to fetch the resource due to a TLS protocol error</li>
+  <li>Fails to fetch the resource due to a HTTP protocol error</li>
+  <li>Fails to fetch the resource due to a socket timeout or error</li>
+  <li>Fails to fetch the resource due to a redirect loop</li>
+</ul><p>The user agent <em class="rfc2119" title="MAY">MAY</em> classify and report server error responses (<a href="https://tools.ietf.org/html/rfc7231#section-6.6">5xx status code</a>, [<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>]) as network errors. For example, a network error report may be triggered when a fetch fails due to proxy or gateway errors, service downtime, and other types of server errors.</p><p>The failure to fetch a resource when the user agent is known to be offline (when <a href="https://html.spec.whatwg.org/#navigator.online"><code>navigator.onLine</code></a> returns <code>false</code>) <em class="rfc2119" title="MUST NOT">MUST NOT</em> be considered to be a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a>.</p><div class="note"><div class="note-title" aria-level="4" role="heading" id="h-note3"><span>Note</span></div><p class="">Note that the above definition of "network error" is different from definition in [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>]. The definition of <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> in this specification is a subset of [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>] definition - i.e. all of the above conditions would trigger a "network error" in [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>] processing, but conditions such as blocked requests due to mixed content, CORS failures, etc., would not.</p></div><p>When a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> occurs for a URL that belongs to a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> log the error and attempt to deliver it to the <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> defined by the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> of the associated <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>:</p><ul>
+  <li>The user agent <em class="rfc2119" title="SHOULD">SHOULD</em> make best effort to deliver the error report as soon as possible to provide the necessary real-time feedback.</li>
+  <li>The user agent <em class="rfc2119" title="MAY">MAY</em> delay delivery of the report to account for poor or missing connectivity (e.g. temporarily offline due to poor service).</li>
+  <li>The user agent <em class="rfc2119" title="MAY">MAY</em> abandon delivery of the report if the time of error exceeds 24 hours, or if the <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> is not responding or returns an error.</li>
+  <li>The user agent <em class="rfc2119" title="MAY">MAY</em> aggregate multiple error reports for the same <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> and deliver them in a single report.</li>
+</ul><p>To generate a <dfn data-dfn-type="dfn" id="dfn-network-error-object">network error object</dfn>, the user agent <em class="rfc2119" title="MUST">MUST</em> use an algorithm equivalent to the following:</p><ol>
+  <li>Prepare a JSON object <i>neterror</i> with the following keys and values:
 
-  <section id="network-error-logging" typeof="bibo:Chapter" resource="#network-error-logging" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-network-error-logging" resource="#h-network-error-logging"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Network Error Logging</span></h2>
+    <dl>
+      <dt id="report-uri"><a href="#report-uri"></a>uri</dt>
+      <dd>The URL that encountered the <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a>, with any <a href="http://www.w3.org/html/wg/drafts/html/CR/infrastructure.html#concept-url-fragment">fragment</a> component removed.</dd>
 
-    <section id="key-concepts-and-terminology" typeof="bibo:Chapter" resource="#key-concepts-and-terminology" property="bibo:hasPart">
-      <h3 id="h-key-concepts-and-terminology" resource="#h-key-concepts-and-terminology"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>Key Concepts and Terminology</span></h3>
-      <dl>
-        <dt><dfn data-dfn-type="dfn" id="dfn-origin">origin</dfn></dt>
-        <dd>Defined by the Origin specification. [<cite><a class="bibref" href="#bib-RFC6454">RFC6454</a></cite>]</dd>
-        <dt><dfn data-dfn-type="dfn" id="dfn-json-object">JSON object</dfn></dt>
-        <dt><dfn data-dfn-type="dfn" id="dfn-json-stringification">JSON stringification</dfn></dt>
-        <dd>Defined in the JSON specification. [<cite><a class="bibref" href="#bib-RFC7159">RFC7159</a></cite>]</dd>
-        <dt><dfn data-dfn-type="dfn" id="dfn-url">URL</dfn></dt>
-        <dd>Defined by [<cite><a class="bibref" href="#bib-URL">URL</a></cite>].</dd>
-      </dl>
-    </section>
+      <dt id="report-referrer"><a href="#report-referrer"></a>referrer</dt>
+      <dd>The referrer information of the request, as <a href="https://w3c.github.io/webappsec/specs/referrer-policy/#determine-requests-referrer">determined by the Referrer policy</a> ([<cite><a class="bibref" href="#bib-REFERRER-POLICY">REFERRER-POLICY</a></cite>]) associated with its <a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>.</dd>
 
-    <section id="policy-delivery-and-processing" typeof="bibo:Chapter" resource="#policy-delivery-and-processing" property="bibo:hasPart">
-      <h3 id="h-policy-delivery-and-processing" resource="#h-policy-delivery-and-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2 </span>Policy Delivery and Processing</span></h3>
-      <p>The server delivers the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> to the user agent via an HTTP response header field (<a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>). If the result of executing <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">is-origin-trusworthy</a> algorithm ([<cite><a class="bibref" href="#bib-POWERFUL-FEATURES">POWERFUL-FEATURES</a></cite>]) on <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> that served the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> is <code>Potentially Trustworthy</code> then the user agent <em class="rfc2119" title="MUST">MUST</em> either:</p>
-      <ul>
-        <li>Register the host as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> if it is not already registered.</li>
-        <li>Update the registered policy for the <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> if the provided policy is different than that already stored by the user agent.</li>
-      </ul>
-      <p>Otherwise, if the result of the algorithm is <strong>not</strong> <code>Potentionally Trustworthy</code>, then the user <em class="rfc2119" title="MUST">MUST</em> ignore the provided <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>.</p>
-
-      <section id="nel-header-field" typeof="bibo:Chapter" resource="#nel-header-field" property="bibo:hasPart">
-        <h4 id="h-nel-header-field" resource="#h-nel-header-field"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1 </span><code>NEL</code> Header Field</span></h4>
-        <p>The <dfn data-dfn-type="dfn" id="dfn-nel-header-field">NEL header field</dfn> is used to communicate the <dfn data-dfn-type="dfn" id="dfn-nel-policy">NEL policy</dfn> to the user agent. The ABNF (Augmented Backus-Naur Form) syntax for the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> is as follows:</p><pre class="hljs livecodeserver">NEL = <span class="hljs-string">"NEL"</span> <span class="hljs-string">":"</span> [ directive ]  *( <span class="hljs-string">";"</span> [ directive ] )
-
-directive                 = directive-name [ <span class="hljs-string">"="</span> directive-<span class="hljs-built_in">value</span> ]
-directive-name            = <span class="hljs-keyword">token</span>
-directive-<span class="hljs-built_in">value</span>           = <span class="hljs-keyword">token</span> | quoted-<span class="hljs-keyword">string</span>
-        </pre>
-        <p>See [<cite><a class="bibref" href="#bib-RFC7230">RFC7230</a></cite>] section 3.2.6 for definitions of <code>token</code> and <code>quoted-string</code>. This specification defines three NEL directives: <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a>, <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a>, and <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a>. The overall requirements for directives are:</p>
+      <dt id="report-server-ip"><a href="#report-server-ip"></a>server-ip</dt>
+      <dd>The IP address of the host to which the user agent sent the request, if available. Otherwise, an empty string.
         <ul>
-          <li>Directive may be optional or required.</li>
-          <li>Directive names are case-insensitive.</li>
-          <li>Directive order is not significant.</li>
-          <li>Directive should be specified once.</li>
+        <li>A host identified by an IPv4 address is represented in dotted-decimal notation (a sequence of four decimal numbers in the range 0 to 255, separated by "."). [<cite><a class="bibref" href="#bib-RFC1123">RFC1123</a></cite>]</li>
+        <li>A host identified by an IPv6 address is represented as an ordered list of eight 16-bit pieces (a sequence of <code>x:x:x:x:x:x:x:x</code>, where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of the address). [<cite><a class="bibref" href="#bib-RFC4291">RFC4291</a></cite>] </li>
         </ul>
-        <p>User agents <em class="rfc2119" title="MUST">MUST</em> ignore any unknown or invalid directive(s), or other header field value data, that does not conform to the syntax defined in this specification. A valid <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> <em class="rfc2119" title="MUST">MUST</em>, at a minimum, contain all of the "<em class="rfc2119" title="REQUIRED">REQUIRED</em>" directives defined in this specification.</p>
-        <ul>
-          <li>If a directive is specified multiple times within the same <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>, the user agent <em class="rfc2119" title="MUST">MUST</em> process the first declaration and ignore the rest.</li>
-          <li>If multiple valid <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>'s are present, the user agent <em class="rfc2119" title="MUST">MUST</em> process the first valid header field and ignore the rest.</li>
-        </ul>
-        <p>The user agent <em class="rfc2119" title="MUST">MUST</em> ignore the NEL header specified via a <code>meta</code> element to mitigate hijacking of error reporting via scripting attacks. The <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> <em class="rfc2119" title="MUST">MUST</em> be delivered via the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a>.</p>
-        <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note1"><span>Note</span></div>
-          <p class="">The restriction on <code>meta</code> element is consistent with [<cite><a class="bibref" href="#bib-CSP">CSP</a></cite>] specification, which restricts reporting registration to HTTP header fields only for same reasons.</p>
-        </div>
+      </dd>
 
-        <section id="the-report-uri-directive" typeof="bibo:Chapter" resource="#the-report-uri-directive" property="bibo:hasPart">
-          <h5 id="h-the-report-uri-directive" resource="#h-the-report-uri-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.1 </span>The <code>report-uri</code> Directive</span></h5>
-          <p>The <dfn data-dfn-type="dfn" id="dfn-report-uri">report-uri</dfn> directive specifies a URL to which the user agent sends reports about network errors. The <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> directive is a <em class="rfc2119" title="REQUIRED">REQUIRED</em> field to register an <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, and <em class="rfc2119" title="OPTIONAL">OPTIONAL</em> if the intent is to remove a previous registration - see <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a>. The ABNF grammar for the name and value of the directive is:</p><pre class="hljs ini"><span class="hljs-setting">directive-name    = <span class="hljs-value"><span class="hljs-string">"report-uri"</span></span></span>
-<span class="hljs-setting">directive-value   = <span class="hljs-value"><span class="hljs-number">1</span>*absolute-URI</span></span>
-          </pre>
-          <p>The <dfn data-dfn-type="dfn" id="dfn-set-of-report-urls">set of report URLs</dfn> is the value of the <a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> directive, which contains one or more <code>absolute-URI</code>'s - see [<cite><a class="bibref" href="#bib-RFC3986">RFC3986</a></cite>] section 4.3. Each <code>absolute-URI</code> value <em class="rfc2119" title="SHOULD">SHOULD</em> be delimited within double-quotes.</p>
-          <p>The result of executing the <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">is-origin-trustworthy</a> algorithm on origin of each <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the provided <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a> <em class="rfc2119" title="MUST">MUST</em> return <code>Potentially Trustworthy</code>. <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">Report URL's</a> that fail this criteria <em class="rfc2119" title="MUST">MUST</em> be ignored by the user agent. The process of sending network error reports to the specified URL's in this directive's value is defined in this documents
-            <a href="#reporting" class="sec-ref"><span class="secno">2.4</span> <span class="sec-title">Reporting</span></a> section.</p>
-          <div class="note">
-            <div class="note-title marker" aria-level="6" role="heading" id="h-note2"><span>Note</span></div>
-            <p class="">To improve delivery of NEL reports the application should set <code>report-uri</code> to an alternative origin whose infrastructure is not coupled with the origin from which the resource is being fetched — otherwise network errors cannot be reported until the problem is solved, if ever — and provide multiple <code>report-uri</code>'s to provide fallback alternatives if the preceding <code>report-uri</code> is unreachable.</p>
-          </div>
-        </section>
+      <dt id="report-protocol"><a href="#report-protocol"></a>protocol</dt>
+      <dd>The <a href="https://w3c.github.io/navigation-timing/#widl-PerformanceNavigationTiming-nextHopProtocol">network protocol</a>  used to fetch the resource as identified by the ALPN Protocol ID, if available. Otherwise, an empty string.</dd>
 
-        <section id="the-max-age-directive" typeof="bibo:Chapter" resource="#the-max-age-directive" property="bibo:hasPart">
-          <h5 id="h-the-max-age-directive" resource="#h-the-max-age-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.2 </span>The <code>max-age</code> Directive</span></h5>
-          <p>The <em class="rfc2119" title="REQUIRED">REQUIRED</em> <dfn data-dfn-type="dfn" id="dfn-max-age">max-age</dfn> directive specifies the number of seconds, after the reception of the NEL header field, during which the user agent regards the host (from whom the policy was received) as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>. The ABNF grammar for the name and value of the directive is:</p><pre class="hljs ini"><span class="hljs-setting">directive-name    = <span class="hljs-value"><span class="hljs-string">"max-age"</span></span></span>
-<span class="hljs-setting">directive-value   = <span class="hljs-value">delta-seconds</span></span>
-          </pre>
-          <p>See [<cite><a class="bibref" href="#bib-RFC7234">RFC7234</a></cite>] section 1.2.1 for definition of <code>delta-seconds</code>. A <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> value of zero (i.e. "max-age=0") signals the user agent to cease regarding the host as a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>, including the <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> directive if provided.</p>
-        </section>
+      <dt id="report-status-code"><a href="#report-status-code"></a>status-code</dt>
+      <dd>The <a href="https://tools.ietf.org/html/rfc7230#section-3.1.2">status-code</a> of the HTTP response, if available. Otherwise, the number 0.</dd>
 
-        <section id="the-includesubdomains-directive" typeof="bibo:Chapter" resource="#the-includesubdomains-directive" property="bibo:hasPart">
-          <h5 id="h-the-includesubdomains-directive" resource="#h-the-includesubdomains-directive"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.1.3 </span>The <code>includeSubDomains</code> Directive</span></h5>
-          <p>The <em class="rfc2119" title="OPTIONAL">OPTIONAL</em> <dfn data-dfn-type="dfn" id="dfn-includesubdomains">includeSubDomains</dfn> directive is a valueless directive that, if present, signals the user agent that the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> applies not only to the <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> that served the <a href="https://tools.ietf.org/html/rfc7231#section-3">resource representation</a>, but also to any <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> whose <a href="https://url.spec.whatwg.org/#concept-url-host">host</a> component is a subdomain of the <a href="https://url.spec.whatwg.org/#concept-url-host">host</a> component of the <a href="https://tools.ietf.org/html/rfc7231#section-3">resource representation</a>’s <a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p>
-        </section>
-      </section>
-    </section>
+      <dt id="report-elapsed-time"><a href="#report-elapsed-time"></a>elapsed-time</dt>
+      <dd>The elapsed number of milliseconds between the start of the resource fetch and when it was aborted by the user agent.</dd>
 
-    <section id="policy-storage-and-maintenance" typeof="bibo:Chapter" resource="#policy-storage-and-maintenance" property="bibo:hasPart">
-      <h3 id="h-policy-storage-and-maintenance" resource="#h-policy-storage-and-maintenance"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Policy Storage and Maintenance</span></h3>
-      <p>An HTTP host declares itself an <dfn data-dfn-type="dfn" id="dfn-nel-origin">NEL origin</dfn> by issuing an <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, which is communicated via the <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> from a <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy"><code>Potentially Trustworthy</code> origin</a>. Upon error-free receipt and processing of this header by a conformant user agent, the user agent regards the host as a <dfn data-dfn-type="dfn" id="dfn-known-nel-origin">known NEL origin</dfn>.</p>
-      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> maintain the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> of any given <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> separately from any NEL policies issued by any other <a data-lt="NEL origin" href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origins</a>. Only the given <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> can update or cause deletion of its <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>. This is accomplished by sending a <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL header field</a> to the user agent with new values for the policy <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a>, <a data-lt="max-age" href="#dfn-max-age" class="internalDFN" data-link-type="dfn">time duration</a>, and <a data-lt="includeSubDomains" href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">subdomain applicability</a>. Thus, the user agent <em class="rfc2119" title="MUST">MUST</em> store the "freshest" <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> information on behalf of an <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>, and specifying a zero time duration <em class="rfc2119" title="MUST">MUST</em> cause the user agent to delete the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> (including any asserted <a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> directive) for that <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>.</p>
-    </section>
+      <dt id="report-age"><a href="#report-age"></a>age</dt>
+      <dd>The elapsed number of milliseconds between the time when the user agent aborted the request and when the error report is being delivered.</dd>
 
-    <section id="reporting" typeof="bibo:Chapter" resource="#reporting" property="bibo:hasPart">
-      <h3 id="h-reporting" resource="#h-reporting"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4 </span>Reporting</span></h3>
-      <p>A <dfn data-dfn-type="dfn" id="dfn-network-error">network error</dfn> is any condition where a connection or a protocol error is encountered by the user agent, thus preventing it from successfully completing the request-response exchange. This may include, but is not limited to DNS, TCP, TLS, and HTTP connection and protocol errors. For example, a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> is triggered when the user agent:</p>
-      <ul>
-        <li>Fails to resolve the DNS name</li>
-        <li>Fails to establish a TCP connection</li>
-        <li>Fails to establish a secure TLS tunnel</li>
-        <li>Fails to fetch the resource due to a TLS protocol error</li>
-        <li>Fails to fetch the resource due to a HTTP protocol error</li>
-        <li>Fails to fetch the resource due to a socket timeout or error</li>
-        <li>Fails to fetch the resource due to a redirect loop</li>
-      </ul>
-      <p>The user agent <em class="rfc2119" title="MAY">MAY</em> classify and report server error responses (<a href="https://tools.ietf.org/html/rfc7231#section-6.6">5xx status code</a>, [<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>]) as network errors. For example, a network error report may be triggered when a fetch fails due to proxy or gateway errors, service downtime, and other types of server errors.</p>
-      <p>The failure to fetch a resource when the user agent is known to be offline (when <a href="https://html.spec.whatwg.org/#navigator.online"><code>navigator.onLine</code></a> returns <code>false</code>) <em class="rfc2119" title="MUST NOT">MUST NOT</em> be considered to be a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a>.</p>
-      <div class="note">
-        <div class="note-title marker" aria-level="4" role="heading" id="h-note3"><span>Note</span></div>
-        <p class="">Note that the above definition of "network error" is different from definition in [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>]. The definition of <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> in this specification is a subset of [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>] definition - i.e. all of the above conditions would trigger a "network error" in [<cite><a class="bibref" href="#bib-Fetch">Fetch</a></cite>] processing, but conditions such as blocked requests due to mixed content, CORS failures, etc., would not.</p>
-      </div>
-      <p>When a <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a> occurs for a URL that belongs to a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a> the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> log the error and attempt to deliver it to the <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> defined by the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> of the associated <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>:</p>
-      <ul>
-        <li>The user agent <em class="rfc2119" title="SHOULD">SHOULD</em> make best effort to deliver the error report as soon as possible to provide the necessary real-time feedback.</li>
-        <li>The user agent <em class="rfc2119" title="MAY">MAY</em> delay delivery of the report to account for poor or missing connectivity (e.g. temporarily offline due to poor service).</li>
-        <li>The user agent <em class="rfc2119" title="MAY">MAY</em> abandon delivery of the report if the time of error exceeds 24 hours, or if the <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> is not responding or returns an error.</li>
-        <li>The user agent <em class="rfc2119" title="MAY">MAY</em> aggregate multiple error reports for the same <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> and deliver them in a single report.</li>
-      </ul>
-      <p>To generate a <dfn data-dfn-type="dfn" id="dfn-network-error-object">network error object</dfn>, the user agent <em class="rfc2119" title="MUST">MUST</em> use an algorithm equivalent to the following:</p>
-      <ol>
-        <li>Prepare a JSON object <i>neterror</i> with the following keys and values:
+      <dt id="report-type"><a href="#report-type"></a>type</dt>
+      <dd>The description of the error type, which may be one the following strings:
 
-          <dl>
-            <dt id="report-uri"><a href="#report-uri"></a>uri</dt>
-            <dd>The URL that encountered the <a href="#dfn-network-error" class="internalDFN" data-link-type="dfn">network error</a>, with any <a href="http://www.w3.org/html/wg/drafts/html/CR/infrastructure.html#concept-url-fragment">fragment</a> component removed.</dd>
+      <dl class="reportTypeGroup">
+        <dt>dns.unreachable</dt>
+        <dd>DNS server is unreachable</dd>
 
-            <dt id="report-referrer"><a href="#report-referrer"></a>referrer</dt>
-            <dd>The referrer information of the request, as <a href="https://w3c.github.io/webappsec/specs/referrer-policy/#determine-requests-referrer">determined by the Referrer policy</a> ([<cite><a class="bibref" href="#bib-REFERRER-POLICY">REFERRER-POLICY</a></cite>]) associated with its <a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>.</dd>
+        <dt>dns.name_not_resolved</dt>
+        <dd>DNS server responded but is unable to resolve the address</dd>
+        <dt>dns.failed</dt>
+        <dd>Request to the DNS server failed due to reasons not covered by previous errors</dd>
 
-            <dt id="report-server-ip"><a href="#report-server-ip"></a>server-ip</dt>
-            <dd>The IP address of the host to which the user agent sent the request, if available. Otherwise, an empty string.
-              <ul>
-                <li>A host identified by an IPv4 address is represented in dotted-decimal notation (a sequence of four decimal numbers in the range 0 to 255, separated by "."). [<cite><a class="bibref" href="#bib-RFC1123">RFC1123</a></cite>]</li>
-                <li>A host identified by an IPv6 address is represented as an ordered list of eight 16-bit pieces (a sequence of <code>x:x:x:x:x:x:x:x</code>, where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of the address). [<cite><a class="bibref" href="#bib-RFC4291">RFC4291</a></cite>] </li>
-              </ul>
-            </dd>
-
-            <dt id="report-protocol"><a href="#report-protocol"></a>protocol</dt>
-            <dd>The <a href="https://w3c.github.io/navigation-timing/#widl-PerformanceNavigationTiming-nextHopProtocol">network protocol</a> used to fetch the resource as identified by the ALPN Protocol ID, if available. Otherwise, an empty string.</dd>
-
-            <dt id="report-status-code"><a href="#report-status-code"></a>status-code</dt>
-            <dd>The <a href="https://tools.ietf.org/html/rfc7230#section-3.1.2">status-code</a> of the HTTP response, if available. Otherwise, the number 0.</dd>
-
-            <dt id="report-elapsed-time"><a href="#report-elapsed-time"></a>elapsed-time</dt>
-            <dd>The elapsed number of milliseconds between the start of the resource fetch and when it was aborted by the user agent.</dd>
-
-            <dt id="report-age"><a href="#report-age"></a>age</dt>
-            <dd>The elapsed number of milliseconds between the time when the user agent aborted the request and when the error report is being delivered.</dd>
-
-            <dt id="report-type"><a href="#report-type"></a>type</dt>
-            <dd>The description of the error type, which may be one the following strings:
-
-              <dl class="reportTypeGroup">
-                <dt>dns.unreachable</dt>
-                <dd>DNS server is unreachable</dd>
-
-                <dt>dns.name_not_resolved</dt>
-                <dd>DNS server responded but is unable to resolve the address</dd>
-                <dt>dns.failed</dt>
-                <dd>Request to the DNS server failed due to reasons not covered by previous errors</dd>
-              </dl>
-              <dl class="reportTypeGroup">
-                <dt>tcp.timed_out</dt>
-                <dd>TCP connection to the server timed out</dd>
-
-                <dt>tcp.closed</dt>
-                <dd>The TCP connection was closed by the server</dd>
-
-                <dt>tcp.reset</dt>
-                <dd>The TCP connection was reset</dd>
-
-                <dt>tcp.refused</dt>
-                <dd>The TCP connection was refused by the server</dd>
-
-                <dt>tcp.aborted</dt>
-                <dd>The TCP connection was aborted</dd>
-
-                <dt>tcp.address_invalid</dt>
-                <dd>The IP address is invalid</dd>
-
-                <dt>tcp.address_unreachable</dt>
-                <dd>The IP address is unreachable</dd>
-
-                <dt>tcp.failed</dt>
-                <dd>The TCP connection failed due to reasons not covered by previous errors</dd>
-              </dl>
-              <dl class="reportTypeGroup">
-                <dt>tls.version_or_cipher_mismatch</dt>
-                <dd>The TLS connection was aborted due to version or cipher mismatch</dd>
-
-                <dt>tls.bad_client_auth_cert</dt>
-                <dd>The TLS connection was aborted due to invalid client certificate</dd>
-
-                <dt>tls.cert.name_invalid</dt>
-                <dd>The TLS connection was aborted due to invalid name</dd>
-
-                <dt>tls.cert.date_invalid</dt>
-                <dd>The TLS connection was aborted due to invalid certificate date</dd>
-
-                <dt>tls.cert.authority_invalid</dt>
-                <dd>The TLS connection was aborted due to invalid issuing authority</dd>
-
-                <dt>tls.cert.invalid</dt>
-                <dd>The TLS connection was aborted due to invalid certificate</dd>
-
-                <dt>tls.cert.revoked</dt>
-                <dd>The TLS connection was aborted due to revoked server certificate</dd>
-
-                <dt>tls.cert.pinned_key_not_in_cert_chain</dt>
-                <dd>The TLS connection was aborted due to a key pinning error</dd>
-
-                <dt>tls.protocol.error</dt>
-                <dd>The TLS connection was aborted due to a TLS protocol error</dd>
-
-                <dt>tls.failed</dt>
-                <dd>The TLS connection failed due to reasons not covered by previous errors</dd>
-              </dl>
-              <dl class="reportTypeGroup">
-                <dt>http.protocol.error</dt>
-                <dd>The connection was aborted due to an HTTP protocol error</dd>
-
-                <dt>http.response.invalid</dt>
-                <dd>Response is empty, has a content-length mismatch, has improper encoding, and/or other conditions that prevent user agent from processing the response</dd>
-
-                <dt>http.response.redirect_loop</dt>
-                <dd>The request was aborted due to a detected redirect loop</dd>
-
-                <dt>http.failed</dt>
-                <dd>The connection failed due to errors in HTTP protocol not covered by previous errors</dd>
-              </dl>
-              <dl class="reportTypeGroup">
-                <dt>abandoned</dt>
-                <dd>User aborted the resource fetch before it is complete</dd>
-
-                <dt>unknown</dt>
-                <dd>error type is unknown</dd>
-              </dl>
-
-              <p>The user agent <em class="rfc2119" title="MAY">MAY</em> extend the above error type list with custom values - e.g. new error types to accommodate new protocols, or more detailed error descriptions of existing ones. When doing so, the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> follow the dot-delimited pattern (<code>[group].[optional-subgroup].[error-name]</code>) to facilitate simple and consistent processing of the error reports - e.g. the collector may provide aggregation by category and/or one or multiple subgroups.</p>
-            </dd>
-          </dl>
-        </li>
-
-        <li>Return <i>neterror</i>.</li>
-      </ol>
-      <p>To send network error reports, the user agent <em class="rfc2119" title="MUST">MUST</em> use an algorithm equivalent to the following:</p>
-      <ol>
-        <li>Prepare a JSON object <dfn data-dfn-type="dfn" id="dfn-report-object">report object</dfn> with the following keys and values:
-
-          <dl>
-            <dt>nel-report</dt>
-            <dd>An array object containing one or more <a data-lt="network error object" href="#dfn-network-error-object" class="internalDFN" data-link-type="dfn">network error objects</a>.</dd>
-          </dl>
-        </li>
-
-        <li>Let <dfn data-dfn-type="dfn" id="dfn-report-body">report body</dfn> be the JSON stringification of the <a href="#dfn-report-object" class="internalDFN" data-link-type="dfn">report object</a>.</li>
-
-        <li>For each <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>:
-
-          <ol>
-            <li><a href="http://www.w3.org/html/wg/drafts/html/CR/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/html/wg/drafts/html/CR/infrastructure.html#fetch">fetch</a> <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> using HTTP method POST, with a <code>Content-Type</code> header field of <code>application/nel-report</code>, and an entity body consisting of <a href="#dfn-report-body" class="internalDFN" data-link-type="dfn">report body</a>. If the origin of <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> is not the same as the origin of the <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> for which the report is generated, the block cookies flag <em class="rfc2119" title="MUST">MUST</em> also be set. The <a href="https://www.w3.org/TR/html5/webappapis.html#task-source">task source</a> for these <a href="https://www.w3.org/TR/html5/webappapis.html#concept-task">tasks</a> is the <dfn data-dfn-type="dfn" id="dfn-network-error-logging-task-source">Network Error Logging task source</dfn>.</li>
-
-            <li>If the fetch is successful (2xx HTTP response code), the user agent <em class="rfc2119" title="MUST">MUST</em> abort the remaining steps.</li>
-
-            <li>If the fetch failed with a <a href="https://tools.ietf.org/html/rfc7231#section-6.5.9">410 Gone</a> HTTP response code ([<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>]), the user agent <em class="rfc2119" title="MUST">MUST</em> update the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> by removing the current <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> from the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.</li>
-
-            <li>If the fetch failed after multiple delivery attempts the user agent <em class="rfc2119" title="MAY">MAY</em> update the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> by removing the current <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> from the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.
-
-              <div class="note">
-                <div class="note-title marker" aria-level="4" role="heading" id="h-note4"><span>Note</span></div>
-                <p class="">The user agent is allowed to garbage collect report-uri's that are no longer functional, but it should account for common failure cases such as captive portals, which may temporarily prevent it from delivering the error reports. The exact implementation logic is deferred to the user-agent, which may use own mechanisms and heuristics to detect such cases.</p>
-              </div>
-            </li>
-
-            <li>If the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> was updated and the new <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> contains an empty <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a> the user agent <em class="rfc2119" title="MUST">MUST</em> remove the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> and abort the remaining steps.</li>
-
-            <li>If the user agent has reached the end of the set of <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URLs</a>, the user agent <em class="rfc2119" title="MUST">MUST</em> sleep before returning to the beginning of the set and reattempting delivery - e.g. use exponential backoff. Otherwise, the user agent <em class="rfc2119" title="MUST">MUST</em> attempt immediate delivery of the error report to the next <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.</li>
-          </ol>
-        </li>
-      </ol>
-    </section>
-
-    <section id="examples" typeof="bibo:Chapter" resource="#examples" property="bibo:hasPart">
-      <h3 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.5 </span>Examples</span></h3>
-
-      <section id="sample-policy-definitions" typeof="bibo:Chapter" resource="#sample-policy-definitions" property="bibo:hasPart">
-        <h4 id="h-sample-policy-definitions" resource="#h-sample-policy-definitions"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.5.1 </span>Sample Policy Definitions</span></h4>
-        <div class="example">
-          <div class="example-title marker"><span>Example 1</span></div><pre class="hljs cpp">&gt; GET / HTTP/<span class="hljs-number">1.1</span>
-&gt; Host: example.com
-
-&lt; HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">200</span> OK
-&lt; ...
-&lt; NEL: report-uri=<span class="hljs-string">"</span><a href="https://example.com/report"><span class="hljs-string">https://example.com/report</span></a><span class="hljs-string">"</span>; max-age=<span class="hljs-number">2592000</span></pre></div>
-        <p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response specifies that the user agent should register a new <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, or update an existing one if one already exists, for the <code>example.com</code> <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>: the user agent should report network errors to <code><a href="https://example.com/report">https://example.com/report</a></code> and the policy applies for 2592000 seconds (30 days).</p>
-        <p>Note that above registration will only succeed if the response is communicated from a <code>Potentially Trustworthy</code> origin - see
-          <a href="#policy-delivery-and-processing" class="sec-ref"><span class="secno">2.2</span> <span class="sec-title">Policy Delivery and Processing</span></a>.</p>
-        <div class="example">
-          <div class="example-title marker"><span>Example 2</span></div><pre class="hljs cpp">&gt; GET / HTTP/<span class="hljs-number">1.1</span>
-&gt; Host: example.com
-
-&lt; HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">200</span> OK
-&lt; ...
-&lt; NEL: report-uri=<span class="hljs-string">"</span><a href="https://other-origin.com/report"><span class="hljs-string">https://other-origin.com/report</span></a><span class="hljs-string">"</span>; max-age=<span class="hljs-number">2592000</span></pre></div>
-        <p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response is similar to the previous example but tells the user agent to report network errors to <code><a href="https://other-origin.com/report">https://other-origin.com/report</a></code>. The use of an alternative origin that is not coupled with the origin that is being accessed is <strong>strongly encouraged</strong> to enable real-time reporting and improved report delivery - see
-          <a href="#the-report-uri-directive" class="sec-ref"><span class="secno">2.2.1.1</span> <span class="sec-title">The report-uri Directive</span></a>.</p>
-        <div class="example">
-          <div class="example-title marker"><span>Example 3</span></div><pre class="hljs cpp">&gt; GET / HTTP/<span class="hljs-number">1.1</span>
-&gt; Host: example.com
-
-&lt; HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">200</span> OK
-&lt; ...
-&lt; NEL: report-uri=<span class="hljs-string">"</span><a href="https://example.com/report"><span class="hljs-string">https://example.com/report</span></a><span class="hljs-string">"</span> <span class="hljs-string">"</span><a href="https://other-origin.com/report"><span class="hljs-string">https://other-origin.com/report</span></a><span class="hljs-string">"</span>; max-age=<span class="hljs-number">2592000</span>; includeSubDomains</pre></div>
-        <p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response specifies that the user agent should report network errors to <code><a href="https://example.com/report">https://example.com/report</a></code>, or <code><a href="https://other-origin.com/report">https://other-origin.com/report</a></code> if the former is unreachable. Further, the policy is extended to all of the subdomains of the issuing <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> - see
-          <a href="#the-includesubdomains-directive" class="sec-ref"><span class="secno">2.2.1.3</span> <span class="sec-title">The includeSubDomains Directive</span></a>.</p>
-        <div class="example">
-          <div class="example-title marker"><span>Example 4</span></div><pre class="hljs cpp">&gt; GET / HTTP/<span class="hljs-number">1.1</span>
-&gt; Host: example.com
-
-&lt; HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">200</span> OK
-&lt; ...
-&lt; NEL: max-age=<span class="hljs-number">0</span></pre></div>
-        <p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response contains <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> set to zero, which indicates that the user agent must delete the current registered <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> associated with the <code>example.com</code> <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> and all of its subdomains:</p>
-        <ul>
-          <li><a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> is implicit when <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> is zero</li>
-          <li><a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> is optional when removing a previously registered policy</li>
-        </ul>
-      </section>
-      <p></p><pre class="hljs vbscript"><code><br>    Sample Network <span class="hljs-built_in"><span class="hljs-keyword">Error</span></span> Reports
-    This section contains an example network <span class="hljs-keyword">error</span> report the user agent might send when a network <span class="hljs-keyword">error</span> <span class="hljs-keyword">is</span> encountered <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> a known NEL origin.<p></p>
-<pre><code>{
-&lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"nel-report"</span>&lt;/span&gt;: [
-    {
-</code></pre>
-      <p><span class="hljs-string"><span class="hljs-string">"uri"</span></span>: <span class="hljs-string"><span class="hljs-string">"</span><a href="https://www.example.com/"><span class="hljs-string">https://www.example.com/</span></a><span class="hljs-string">"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"referrer"</span></span>: <span class="hljs-string"><span class="hljs-string">"</span><a href="http://example.com/"><span class="hljs-string">http://example.com/</span></a><span class="hljs-string">"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"server-ip"</span></span>: <span class="hljs-string"><span class="hljs-string">"123.122.121.120"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"protocol"</span></span>: <span class="hljs-string"><span class="hljs-string">"h2"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"status-code"</span></span>: <span class="hljs-number"><span class="hljs-number">200</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"elapsed-time"</span></span>: <span class="hljs-number"><span class="hljs-number">823</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"age"</span></span>: <span class="hljs-number"><span class="hljs-number">0</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"type"</span></span>: <span class="hljs-string"><span class="hljs-string">"http.protocol.error"</span></span> } ] }
-      </p>
-      <pre><code>The above report indicates that the user agent attempted <span class="hljs-keyword">to</span> navigate from &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"example.com"</span>&lt;/span&gt; <span class="hljs-keyword">to</span> &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"www.example.com"</span>&lt;/span&gt; (known NEL origin), which successfully resolved <span class="hljs-keyword">to</span> the &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"123.122.121.120"</span>&lt;/span&gt; IP address. However, &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-keyword"</span>&gt;<span class="hljs-keyword">while</span>&lt;/span&gt; the user agent received a &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"200"</span>&lt;/span&gt; <span class="hljs-built_in">response</span> from the <span class="hljs-built_in">server</span> via the &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"h2"</span>&lt;/span&gt; protocol, it encountered a protocol <span class="hljs-keyword">error</span> &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-keyword"</span>&gt;<span class="hljs-keyword">in</span>&lt;/span&gt; the exchange <span class="hljs-keyword">and</span> was forced <span class="hljs-keyword">to</span> abandon the navigation. &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-number"</span>&gt;<span class="hljs-number">823</span>&lt;/span&gt; milliseconds elapsed between the start &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-keyword"</span>&gt;of&lt;/span&gt; navigation <span class="hljs-keyword">and</span> when the user agent aborted the navigation. Finally, the user agent sent &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-keyword"</span>&gt;this&lt;/span&gt; report immediately after the network <span class="hljs-keyword">error</span> was encountered - i.e. the report age <span class="hljs-keyword">is</span> &lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-number"</span>&gt;<span class="hljs-number">0.</span>&lt;/span&gt;
-
-{
-&lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">"nel-report"</span>&lt;/span&gt;: [
-    {
-</code></pre>
-      <p><span class="hljs-string"><span class="hljs-string">"uri"</span></span>: <span class="hljs-string"><span class="hljs-string">"</span><a href="https://widget.com/thing.js"><span class="hljs-string">https://widget.com/thing.js</span></a><span class="hljs-string">"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"referrer"</span></span>: <span class="hljs-string"><span class="hljs-string">"</span><a href="https://www.example.com/"><span class="hljs-string">https://www.example.com/</span></a><span class="hljs-string">"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"server-ip"</span></span>: <span class="hljs-string"><span class="hljs-string">"234.233.232.231"</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"protocol"</span></span>: <span class="hljs-string"><span class="hljs-string">""</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"status-code"</span></span>: <span class="hljs-number"><span class="hljs-number">0</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"elapsed-time"</span></span>: <span class="hljs-number"><span class="hljs-number">143</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"age"</span></span>: <span class="hljs-number"><span class="hljs-number">0</span></span>,
-        <span class="hljs-string"><span class="hljs-string">"type"</span></span>: <span class="hljs-string"><span class="hljs-string">"http.dns.name_not_resolved"</span></span> } ] }
-      </p>
-      <pre><code>The above report indicates that the user agent attempted <span class="hljs-keyword">to</span> fetch  <span class="hljs-string"><span class="hljs-string">"https://widget.com/thing.js"</span></span>, which belongs <span class="hljs-keyword">to</span> a previously registered NEL origin, from <span class="hljs-string"><span class="hljs-string">"www.example.com"</span></span> origin. However, the user agent was unable <span class="hljs-keyword">to</span> resolve the DNS name <span class="hljs-keyword">and</span> the <span class="hljs-built_in">request</span> was aborted by the user agent after <span class="hljs-number"><span class="hljs-number">143</span></span> milliseconds. Because <span class="hljs-string"><span class="hljs-string">"widget.com"</span></span> <span class="hljs-keyword">is</span> a known NEL origin, a network <span class="hljs-keyword">error</span> report was logged <span class="hljs-keyword">and</span> sent <span class="hljs-keyword">to</span> the report URL specified by the NEL policy <span class="hljs-keyword">of</span> that host immediately after the network <span class="hljs-keyword">error</span> was encountered - i.e. the report age <span class="hljs-keyword">is</span> <span class="hljs-number"><span class="hljs-number">0.</span></span>
-  Use cases
-
-  
-    Reporting <span class="hljs-keyword">of</span> Navigation Failures
-
-    A navigation <span class="hljs-built_in">request</span> initiated by the user (e.g. via a click <span class="hljs-keyword">on</span> a link, direct input via the location bar, script-initiated due <span class="hljs-keyword">to</span> user interaction, etc.) may fail due any number <span class="hljs-keyword">of</span> connectivity reasons: DNS failure, TCP <span class="hljs-keyword">error</span>, TLS protocol violation, <span class="hljs-keyword">and</span> so <span class="hljs-keyword">on</span>. These errors may be caused by network misconfiguration, transient routing issues, <span class="hljs-built_in">server</span> downtime, malware <span class="hljs-keyword">or</span> other attacks against the user, etc.
-
-    <span class="hljs-keyword">In</span> such cases the destination host <span class="hljs-keyword">is</span> often <span class="hljs-built_in">left</span> unaware <span class="hljs-keyword">of</span> the failed navigation since, by definition, it cannot see the <span class="hljs-built_in">request</span> reach its infrastructure <span class="hljs-keyword">and</span> it <span class="hljs-keyword">is</span> unable <span class="hljs-keyword">to</span> investigate the problem. <span class="hljs-keyword">To</span> address <span class="hljs-keyword">this</span>, the host can register an NEL policy <span class="hljs-keyword"><span class="hljs-keyword">with</span></span> the user agent, which specifies where reports <span class="hljs-keyword">of</span> such failures should be delivered such that they can be investigated.
-</code></pre>
-      <p></p><pre><code>
-  Reporting <span class="hljs-keyword">of</span> First-party Subresource Fetch Failures<p></p>
-<p>  A typical application requires dozens <span class="hljs-keyword">of</span> resources, the fetching <span class="hljs-keyword">of</span> which <span class="hljs-keyword">is</span> typically initiated via HTML, CSS, <span class="hljs-keyword">or</span> JavaScript. The application requesting such resources can observe failures <span class="hljs-keyword">of</span> most such fetches (e.g. via <span class="hljs-string"><code>onerror</code></span> callbacks), but it does <span class="hljs-keyword">not</span> have access <span class="hljs-keyword">to</span> the detailed network <span class="hljs-keyword">error</span> report <span class="hljs-keyword">of</span> why the failure has occurred - e.g. DNS failure, TCP <span class="hljs-keyword">error</span>, TLS protocol violation, etc.</p>
-<p>  <span class="hljs-keyword">To</span> address <span class="hljs-keyword">this</span>, the application can register relevant NEL policies <span class="hljs-keyword"><span class="hljs-keyword">with</span></span> the user agent <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> the first-party hosts from which the subresources are being fetched. <span class="hljs-keyword">Then</span>, <span class="hljs-keyword"><span class="hljs-keyword">if</span></span> such a policy <span class="hljs-keyword">is</span> present <span class="hljs-keyword">and</span> a network <span class="hljs-keyword">error</span> <span class="hljs-keyword">is</span> encountered <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> a resource associated <span class="hljs-keyword"><span class="hljs-keyword">with</span></span> a registered NEL origin, the user agent will report the detailed network <span class="hljs-keyword">error</span> report <span class="hljs-keyword">and</span> enable the application developers <span class="hljs-keyword">to</span> investigate the <span class="hljs-keyword">error</span>.</p>
-<p>  Reporting <span class="hljs-keyword">of</span> Third-party Subresource Fetch Failures</p>
-<p>  <span class="hljs-keyword">In</span> the <span class="hljs-keyword"><span class="hljs-keyword">case</span></span> where a resource <span class="hljs-keyword">is</span> embedded by a third party, the provider <span class="hljs-keyword">of</span> the resource <span class="hljs-keyword">is</span> often unable <span class="hljs-keyword">to</span> instrument <span class="hljs-keyword">and</span> observe the failure. <span class="hljs-keyword">For</span> example, <span class="hljs-keyword"><span class="hljs-keyword">if</span></span> <span class="hljs-string"><code>example.com</code></span> embeds a <span class="hljs-string"><code>widget.com/thing.js</code></span> resource <span class="hljs-keyword">on</span> its site, <span class="hljs-keyword">and</span> the user visiting <span class="hljs-string"><code>example.com</code></span> fails <span class="hljs-keyword">to</span> fetch such resource due <span class="hljs-keyword">to</span> a network <span class="hljs-keyword">error</span>, the <span class="hljs-string"><code>widget.com</code></span> host <span class="hljs-keyword">is</span> both unaware <span class="hljs-keyword">of</span> the failure <span class="hljs-keyword">and</span> unable <span class="hljs-keyword">to</span> detect it.</p>
-</code><p><code>  <span class="hljs-keyword">To</span> address <span class="hljs-keyword">this</span>, <span class="hljs-string"><code>widget.com</code></span> can register an NEL policy <span class="hljs-keyword"><span class="hljs-keyword">for</span></span> its host. <span class="hljs-keyword">Then</span>, <span class="hljs-keyword"><span class="hljs-keyword">if</span></span> such policy <span class="hljs-keyword">is</span> present <span class="hljs-keyword">and</span> a network <span class="hljs-keyword">error</span> <span class="hljs-keyword">is</span> encountered <span class="hljs-keyword"><span class="hljs-keyword">while</span></span> fetching a resource — regardless <span class="hljs-keyword">of</span> whether it <span class="hljs-keyword">is</span> being requested from a first-party <span class="hljs-keyword">or</span> third-party origin — from the registered NEL origin, the user agent will report the network <span class="hljs-keyword">error</span> <span class="hljs-keyword">and</span> enable the provider <span class="hljs-keyword">to</span> investigate the <span class="hljs-keyword">error</span>.
-</code></p></pre>
-
-      <section typeof="bibo:Chapter" resource="#privacy-considerations" property="bibo:hasPart">
-        <h4 id="privacy-considerations" resource="#privacy-considerations"><span property="xhv:role" resource="xhv:heading">Privacy Considerations</span></h4>
-        <p></p>
-        <pre><code>NEL provides network <span class="hljs-keyword">error</span> reports that could expose <span class="hljs-keyword">new</span> information about the user<span class="hljs-comment">'s network configuration. For example, an attacker could abuse NEL reporting to probe users network configuration. Also, similar to HSTS, HPKP, and pinned CSP policies, the stored NEL policy could be used as a "supercookie" by setting a distinct policy with a custom (per-user) reporting URI to act as an identififer in combination with (or instead of) HTTP cookies.</span>
-
-<span class="hljs-keyword">To</span> mitigate some of the above risks, NEL registration <span class="hljs-keyword">is</span> restricted <span class="hljs-keyword">to</span> trustworthy origins, <span class="hljs-keyword">and</span> delivery of network <span class="hljs-keyword">error</span> reports <span class="hljs-keyword">is</span> similarly restricted <span class="hljs-keyword">to</span> trustworthy origins. This disallows a transient HTTP MITM from trivially abusing NEL as a persistent tracker.
-
-<span class="hljs-keyword">In</span> addition <span class="hljs-keyword">to</span> above restrictions, the user agents MUST:
-
-
-  Clear the stored NEL policies when the user clears their browsing data (cookies, site data, history, etc).
-  Refuse <span class="hljs-keyword">to</span> process <span class="hljs-keyword">Set</span>-Cookie <span class="hljs-built_in">response</span> headers when delivering network <span class="hljs-keyword">error</span> reports.
-
-When deploying NEL the developer SHOULD consider privacy implications of NEL reports delivered <span class="hljs-keyword">to</span> the specified collectors. <span class="hljs-keyword">For</span> example, reports may contain URLs <span class="hljs-keyword">with</span> sensitive data (e.g. <span class="hljs-string">"Capability URLs"</span>) that may need special precautions (see [[!CAPABILITY-URLS]]), <span class="hljs-keyword">and</span> may require the developer <span class="hljs-keyword">to</span> operate their own NEL collectors <span class="hljs-keyword">to</span> prevent reporting of such URLs <span class="hljs-keyword">to</span> third parties.
-</code></pre>
-
-        <section typeof="bibo:Chapter" resource="#iana-considerations" property="bibo:hasPart">
-          <h5 id="iana-considerations" resource="#iana-considerations"><span property="xhv:role" resource="xhv:heading">IANA Considerations</span></h5>
-          <p>The permanent message header field registry should be updated <span class="hljs-keyword">with</span> the following registrations ([[RFC3864]]):</p>
-
-          <section typeof="bibo:Chapter" resource="#nel" property="bibo:hasPart">
-            <h6 id="nel" resource="#nel"><span property="xhv:role" resource="xhv:heading">NEL</span></h6>
-            <dl>
-              <dt>Header field name</dt>
-              <dd>NEL</dd>
-              <dt>Applicable protocol</dt>
-              <dd>http</dd>
-              <dt>Status</dt>
-              <dd>standard</dd>
-              <dt>Author/Change controller</dt>
-              <dd>W3C</dd>
-              <dt>Specification document</dt>
-              <dd>This specification (see <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL Header Field</a>)</dd>
-            </dl>
-          </section>
-        </section>
-      </section>
-      </code>
-      </pre>
-    </section><code>
-</code></section><code>
-
-<section class="appendix" typeof="bibo:Chapter" resource="#acknowledgments" property="bibo:hasPart">
-  <h2 id="acknowledgments" resource="#acknowledgments"><span property="xhv:role" resource="xhv:heading">Acknowledgments</span></h2>
-  <p>This document reuses text from the [<cite><a class="bibref" href="#bib-CSP">CSP</a></cite>] and [<cite><a class="bibref" href="#bib-RFC6797">RFC6797</a></cite>] specification, as permitted by the licenses of those specifications. Additionally, sincere thanks to Thomas Tuttle, Chris Bentzel, Todd Reifsteck, Aaron Heady, and Mark Nottingham for their helpful comments and contributions to this work.</p>
-</section></code>
-
-  <section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2>
-
-    <section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart">
-      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3>
-      <dl class="bibliography" resource=""><dt id="bib-POWERFUL-FEATURES">[POWERFUL-FEATURES]</dt>
-        <dd>Mike West. W3C. <a href="http://www.w3.org/TR/secure-contexts/" property="dc:requires"><cite>Secure Contexts</cite></a>. 26 April 2016. W3C Working Draft. URL: <a href="http://www.w3.org/TR/secure-contexts/" property="dc:requires">http://www.w3.org/TR/secure-contexts/</a>
-        </dd><dt id="bib-REFERRER-POLICY">[REFERRER-POLICY]</dt>
-        <dd>Jochen Eisinger; Mike West. W3C. <a href="http://www.w3.org/TR/referrer-policy/" property="dc:requires"><cite>Referrer Policy</cite></a>. 7 August 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/referrer-policy/" property="dc:requires">http://www.w3.org/TR/referrer-policy/</a>
-        </dd><dt id="bib-RFC3986">[RFC3986]</dt>
-        <dd>T. Berners-Lee; R. Fielding; L. Masinter. IETF. <a href="https://tools.ietf.org/html/rfc3986" property="dc:requires"><cite>Uniform Resource Identifier (URI): Generic Syntax</cite></a>. January 2005. Internet Standard. URL: <a href="https://tools.ietf.org/html/rfc3986" property="dc:requires">https://tools.ietf.org/html/rfc3986</a>
-        </dd><dt id="bib-RFC7230">[RFC7230]</dt>
-        <dd>R. Fielding, Ed.; J. Reschke, Ed.. IETF. <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires">https://tools.ietf.org/html/rfc7230</a>
-        </dd><dt id="bib-RFC7234">[RFC7234]</dt>
-        <dd>R. Fielding, Ed.; M. Nottingham, Ed.; J. Reschke, Ed.. IETF. <a href="https://tools.ietf.org/html/rfc7234" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Caching</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7234" property="dc:requires">https://tools.ietf.org/html/rfc7234</a>
-        </dd>
       </dl>
-    </section>
+      <dl class="reportTypeGroup">
+        <dt>tcp.timed_out</dt>
+        <dd>TCP connection to the server timed out</dd>
 
-    <section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart">
-      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3>
-      <dl class="bibliography" resource=""><dt id="bib-CSP">[CSP]</dt>
-        <dd>Brandon Sterne; Adam Barth. W3C. <a href="http://www.w3.org/TR/CSP1/" property="dc:references"><cite>Content Security Policy 1.0</cite></a>. 19 February 2015. W3C Note. URL: <a href="http://www.w3.org/TR/CSP1/" property="dc:references">http://www.w3.org/TR/CSP1/</a>
-        </dd><dt id="bib-Fetch">[Fetch]</dt>
-        <dd>Anne van Kesteren. WHATWG. <a href="https://fetch.spec.whatwg.org/" property="dc:references"><cite>Fetch Standard</cite></a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/" property="dc:references">https://fetch.spec.whatwg.org/</a>
-        </dd><dt id="bib-RFC1123">[RFC1123]</dt>
-        <dd>R. Braden, Ed.. IETF. <a href="https://tools.ietf.org/html/rfc1123" property="dc:references"><cite>Requirements for Internet Hosts - Application and Support</cite></a>. October 1989. Internet Standard. URL: <a href="https://tools.ietf.org/html/rfc1123" property="dc:references">https://tools.ietf.org/html/rfc1123</a>
-        </dd><dt id="bib-RFC4291">[RFC4291]</dt>
-        <dd>R. Hinden; S. Deering. IETF. <a href="https://tools.ietf.org/html/rfc4291" property="dc:references"><cite>IP Version 6 Addressing Architecture</cite></a>. February 2006. Draft Standard. URL: <a href="https://tools.ietf.org/html/rfc4291" property="dc:references">https://tools.ietf.org/html/rfc4291</a>
-        </dd><dt id="bib-RFC6454">[RFC6454]</dt>
-        <dd>A. Barth. IETF. <a href="https://tools.ietf.org/html/rfc6454" property="dc:references"><cite>The Web Origin Concept</cite></a>. December 2011. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6454" property="dc:references">https://tools.ietf.org/html/rfc6454</a>
-        </dd><dt id="bib-RFC6797">[RFC6797]</dt>
-        <dd>J. Hodges; C. Jackson; A. Barth. IETF. <a href="https://tools.ietf.org/html/rfc6797" property="dc:references"><cite>HTTP Strict Transport Security (HSTS)</cite></a>. November 2012. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6797" property="dc:references">https://tools.ietf.org/html/rfc6797</a>
-        </dd><dt id="bib-RFC7159">[RFC7159]</dt>
-        <dd>T. Bray, Ed.. IETF. <a href="https://tools.ietf.org/html/rfc7159" property="dc:references"><cite>The JavaScript Object Notation (JSON) Data Interchange Format</cite></a>. March 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7159" property="dc:references">https://tools.ietf.org/html/rfc7159</a>
-        </dd><dt id="bib-RFC7231">[RFC7231]</dt>
-        <dd>R. Fielding, Ed.; J. Reschke, Ed.. IETF. <a href="https://tools.ietf.org/html/rfc7231" property="dc:references"><cite>Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7231" property="dc:references">https://tools.ietf.org/html/rfc7231</a>
-        </dd><dt id="bib-URL">[URL]</dt>
-        <dd>Anne van Kesteren; Sam Ruby. W3C. <a href="http://www.w3.org/TR/url-1/" property="dc:references"><cite>URL</cite></a>. 9 December 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/url-1/" property="dc:references">http://www.w3.org/TR/url-1/</a>
-        </dd>
+        <dt>tcp.closed</dt>
+        <dd>The TCP connection was closed by the server</dd>
+
+        <dt>tcp.reset</dt>
+        <dd>The TCP connection was reset</dd>
+
+        <dt>tcp.refused</dt>
+        <dd>The TCP connection was refused by the server</dd>
+
+        <dt>tcp.aborted</dt>
+        <dd>The TCP connection was aborted</dd>
+
+        <dt>tcp.address_invalid</dt>
+        <dd>The IP address is invalid</dd>
+
+        <dt>tcp.address_unreachable</dt>
+        <dd>The IP address is unreachable</dd>
+
+        <dt>tcp.failed</dt>
+        <dd>The TCP connection failed due to reasons not covered by previous errors</dd>
+
+
       </dl>
-    </section>
-  </section>
-  <p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p>
-  <script async="" defer="" src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
-</body>
-</html>
+      <dl class="reportTypeGroup">
+        <dt>tls.version_or_cipher_mismatch</dt>
+        <dd>The TLS connection was aborted due to version or cipher mismatch</dd>
+
+        <dt>tls.bad_client_auth_cert</dt>
+        <dd>The TLS connection was aborted due to invalid client certificate</dd>
+
+        <dt>tls.cert.name_invalid</dt>
+        <dd>The TLS connection was aborted due to invalid name</dd>
+
+        <dt>tls.cert.date_invalid</dt>
+        <dd>The TLS connection was aborted due to invalid certificate date</dd>
+
+        <dt>tls.cert.authority_invalid</dt>
+        <dd>The TLS connection was aborted due to invalid issuing authority</dd>
+
+        <dt>tls.cert.invalid</dt>
+        <dd>The TLS connection was aborted due to invalid certificate</dd>
+
+        <dt>tls.cert.revoked</dt>
+        <dd>The TLS connection was aborted due to revoked server certificate</dd>
+
+        <dt>tls.cert.pinned_key_not_in_cert_chain</dt>
+        <dd>The TLS connection was aborted due to a key pinning error</dd>
+
+        <dt>tls.protocol.error</dt>
+        <dd>The TLS connection was aborted due to a TLS protocol error</dd>
+
+        <dt>tls.failed</dt>
+        <dd>The TLS connection failed due to reasons not covered by previous errors</dd>
+
+      </dl>
+      <dl class="reportTypeGroup">
+        <dt>http.protocol.error</dt>
+        <dd>The connection was aborted due to an HTTP protocol error</dd>
+
+        <dt>http.response.invalid</dt>
+        <dd>Response is empty, has a content-length mismatch, has improper encoding, and/or other conditions that prevent user agent from processing the response</dd>
+
+        <dt>http.response.redirect_loop</dt>
+        <dd>The request was aborted due to a detected redirect loop</dd>
+
+        <dt>http.failed</dt>
+        <dd>The connection failed due to errors in HTTP protocol not covered by previous errors</dd>
+
+      </dl>
+      <dl class="reportTypeGroup">
+        <dt>abandoned</dt>
+        <dd>User aborted the resource fetch before it is complete</dd>
+
+        <dt>unknown</dt>
+        <dd>error type is unknown</dd>
+      </dl>
+
+      <p>The user agent <em class="rfc2119" title="MAY">MAY</em> extend the above error type list with custom values - e.g. new error types to accommodate new protocols, or more detailed error descriptions of existing ones. When doing so, the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> follow the dot-delimited pattern (<code>[group].[optional-subgroup].[error-name]</code>) to facilitate simple and consistent processing of the error reports - e.g. the collector may provide aggregation by category and/or one or multiple subgroups.</p>
+      </dd>
+    </dl>
+  </li>
+
+  <li>Return <i>neterror</i>.</li>
+</ol><p>To send network error reports, the user agent <em class="rfc2119" title="MUST">MUST</em> use an algorithm equivalent to the following:</p><ol>
+  <li>Prepare a JSON object <dfn data-dfn-type="dfn" id="dfn-report-object">report object</dfn> with the following keys and values:
+
+    <dl>
+      <dt>nel-report</dt>
+      <dd>An array object containing one or more <a data-lt="network error object" href="#dfn-network-error-object" class="internalDFN" data-link-type="dfn">network error objects</a>.</dd>
+    </dl>
+  </li>
+
+  <li>Let <dfn data-dfn-type="dfn" id="dfn-report-body">report body</dfn> be the JSON stringification of the <a href="#dfn-report-object" class="internalDFN" data-link-type="dfn">report object</a>.</li>
+
+  <li>For each <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>:
+
+  <ol>
+    <li><a href="http://www.w3.org/html/wg/drafts/html/CR/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/html/wg/drafts/html/CR/infrastructure.html#fetch">fetch</a> <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> using HTTP method POST, with a <code>Content-Type</code> header field of <code>application/nel-report</code>, and an entity body consisting of <a href="#dfn-report-body" class="internalDFN" data-link-type="dfn">report body</a>. If the origin of <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> is not the same as the origin of the <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> for which the report is generated, the block cookies flag <em class="rfc2119" title="MUST">MUST</em> also be set. The <a href="https://www.w3.org/TR/html5/webappapis.html#task-source">task source</a> for these <a href="https://www.w3.org/TR/html5/webappapis.html#concept-task">tasks</a> is the <dfn data-dfn-type="dfn" id="dfn-network-error-logging-task-source">Network Error Logging task source</dfn>.</li>
+
+    <li>If the fetch is successful (2xx HTTP response code), the user agent <em class="rfc2119" title="MUST">MUST</em> abort the remaining steps.</li>
+
+    <li>If the fetch failed with a <a href="https://tools.ietf.org/html/rfc7231#section-6.5.9">410 Gone</a> HTTP response code ([<cite><a class="bibref" href="#bib-RFC7231">RFC7231</a></cite>]), the user agent <em class="rfc2119" title="MUST">MUST</em> update the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> by removing the current <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> from the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.</li>
+
+    <li>If the fetch failed after multiple delivery attempts the user agent <em class="rfc2119" title="MAY">MAY</em> update the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> by removing the current <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> from the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.
+
+    <div class="note"><div class="note-title" aria-level="4" role="heading" id="h-note4"><span>Note</span></div><p class="">The user agent is allowed to garbage collect report-uri's that are no longer functional, but it should account for common failure cases such as captive portals, which may temporarily prevent it from delivering the error reports. The exact implementation logic is deferred to the user-agent, which may use own mechanisms and heuristics to detect such cases.</p></div>
+    </li>
+
+    <li>If the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> was updated and the new <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> contains an empty <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a> the user agent <em class="rfc2119" title="MUST">MUST</em> remove the <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> and abort the remaining steps.</li>
+
+    <li>If the user agent has reached the end of the set of <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URLs</a>, the user agent <em class="rfc2119" title="MUST">MUST</em> sleep before returning to the beginning of the set and reattempting delivery - e.g. use exponential backoff. Otherwise, the user agent <em class="rfc2119" title="MUST">MUST</em> attempt immediate delivery of the error report to the next <a data-lt="report-uri" href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report URL</a> in the <a href="#dfn-set-of-report-urls" class="internalDFN" data-link-type="dfn">set of report URLs</a>.</li>
+  </ol>
+  </li>
+</ol></section><section id="examples" typeof="bibo:Chapter" resource="#examples" property="bibo:hasPart"><h3 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.5 </span>Examples</span></h3><section id="sample-policy-definitions" typeof="bibo:Chapter" resource="#sample-policy-definitions" property="bibo:hasPart"><h4 id="h-sample-policy-definitions" resource="#h-sample-policy-definitions"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.5.1 </span>Sample Policy Definitions</span></h4><div class="example"><div class="example-title"><span>Example 1</span></div><pre class="example">&gt; GET / HTTP/1.1
+&gt; Host: example.com
+
+&lt; HTTP/1.1 200 OK
+&lt; ...
+&lt; NEL: report-uri="https://example.com/report"; max-age=2592000</pre></div><p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response specifies that the user agent should register a new <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a>, or update an existing one if one already exists, for the <code>example.com</code> <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>: the user agent should report network errors to <code>https://example.com/report</code> and the policy applies for 2592000 seconds (30 days).</p><p>Note that above registration will only succeed if the response is communicated from a <code>Potentially Trustworthy</code> origin - see <a href="#policy-delivery-and-processing" class="sec-ref"><span class="secno">2.2</span> <span class="sec-title">Policy Delivery and Processing</span></a>.</p><div class="example"><div class="example-title"><span>Example 2</span></div><pre class="example">&gt; GET / HTTP/1.1
+&gt; Host: example.com
+
+&lt; HTTP/1.1 200 OK
+&lt; ...
+&lt; NEL: report-uri="https://other-origin.com/report"; max-age=2592000</pre></div><p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response is similar to the previous example but tells the user agent to report network errors to <code>https://other-origin.com/report</code>. The use of an alternative origin that is not coupled with the origin that is being accessed is <strong>strongly encouraged</strong> to enable real-time reporting and improved report delivery - see <a href="#the-report-uri-directive" class="sec-ref"><span class="secno">2.2.1.1</span> <span class="sec-title">The report-uri Directive</span></a>.</p><div class="example"><div class="example-title"><span>Example 3</span></div><pre class="example">&gt; GET / HTTP/1.1
+&gt; Host: example.com
+
+&lt; HTTP/1.1 200 OK
+&lt; ...
+&lt; NEL: report-uri="https://example.com/report" "https://other-origin.com/report"; max-age=2592000; includeSubDomains</pre></div><p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response specifies that the user agent should report network errors to <code>https://example.com/report</code>, or <code>https://other-origin.com/report</code> if the former is unreachable. Further, the policy is extended to all of the subdomains of the issuing <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> - see <a href="#the-includesubdomains-directive" class="sec-ref"><span class="secno">2.2.1.3</span> <span class="sec-title">The includeSubDomains Directive</span></a>.</p><div class="example"><div class="example-title"><span>Example 4</span></div><pre class="example">&gt; GET / HTTP/1.1
+&gt; Host: example.com
+
+&lt; HTTP/1.1 200 OK
+&lt; ...
+&lt; NEL: max-age=0</pre></div><p>The above <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> provided in the server response contains <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> set to zero, which indicates that the user agent must delete the current registered <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> associated with the <code>example.com</code> <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a> and all of its subdomains:</p><ul>
+    <li><a href="#dfn-includesubdomains" class="internalDFN" data-link-type="dfn">includeSubDomains</a> is implicit when <a href="#dfn-max-age" class="internalDFN" data-link-type="dfn">max-age</a> is zero</li>
+    <li><a href="#dfn-report-uri" class="internalDFN" data-link-type="dfn">report-uri</a> is optional when removing a previously registered policy</li>
+  </ul></section><section id="sample-network-error-reports" typeof="bibo:Chapter" resource="#sample-network-error-reports" property="bibo:hasPart"><h4 id="h-sample-network-error-reports" resource="#h-sample-network-error-reports"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.5.2 </span>Sample Network Error Reports</span></h4><p>This section contains an example network error report the user agent might send when a network error is encountered for a <a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>.</p><pre class="highlight prettyprint prettyprinted" style=""><span class="pun">{</span><span class="pln">
+  </span><span class="str">"nel-report"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln">
+      </span><span class="pun">{</span><span class="pln">
+        </span><span class="str">"uri"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"https://www.example.com/"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"referrer"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"http://example.com/"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"server-ip"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"123.122.121.120"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"protocol"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"h2"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"status-code"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">200</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"elapsed-time"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">823</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"age"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"type"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"http.protocol.error"</span><span class="pln">
+      </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">]</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+  </span></pre><p>The above report indicates that the user agent attempted to navigate from "example.com" to "www.example.com" (<a href="#dfn-known-nel-origin" class="internalDFN" data-link-type="dfn">known NEL origin</a>), which successfully resolved to the "123.122.121.120" IP address. However, while the user agent received a "200" response from the server via the "h2" protocol, it encountered a protocol error in the exchange and was forced to abandon the navigation. 823 milliseconds elapsed between the start of navigation and when the user agent aborted the navigation. Finally, the user agent sent this report immediately after the network error was encountered - i.e. the report age is 0.</p><pre class="highlight prettyprint prettyprinted" style=""><span class="pun">{</span><span class="pln">
+  </span><span class="str">"nel-report"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln">
+      </span><span class="pun">{</span><span class="pln">
+        </span><span class="str">"uri"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"https://widget.com/thing.js"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"referrer"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"https://www.example.com/"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"server-ip"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"234.233.232.231"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"protocol"</span><span class="pun">:</span><span class="pln"> </span><span class="str">""</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"status-code"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"elapsed-time"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">143</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"age"</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"type"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"http.dns.name_not_resolved"</span><span class="pln">
+      </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">]</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+  </span></pre><p>The above report indicates that the user agent attempted to fetch  "https://widget.com/thing.js", which belongs to a previously registered <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>, from "www.example.com" origin. However, the user agent was unable to resolve the DNS name and the request was aborted by the user agent after 143 milliseconds. Because "widget.com" is a known NEL origin, a network error report was logged and sent to the report URL specified by the NEL policy of that host immediately after the network error was encountered - i.e. the report age is 0.</p></section></section><section id="use-cases" typeof="bibo:Chapter" resource="#use-cases" property="bibo:hasPart"><h3 id="h-use-cases" resource="#h-use-cases"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.6 </span>Use cases</span></h3><section id="reporting-of-navigation-failures" typeof="bibo:Chapter" resource="#reporting-of-navigation-failures" property="bibo:hasPart"><h4 id="h-reporting-of-navigation-failures" resource="#h-reporting-of-navigation-failures"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.6.1 </span>Reporting of Navigation Failures</span></h4><p>A navigation request initiated by the user (e.g. via a click on a link, direct input via the location bar, script-initiated due to user interaction, etc.) may fail due any number of connectivity reasons: DNS failure, TCP error, TLS protocol violation, and so on. These errors may be caused by network misconfiguration, transient routing issues, server downtime, malware or other attacks against the user, etc.</p><p>In such cases the destination host is often left unaware of the failed navigation since, by definition, it cannot see the request reach its infrastructure and it is unable to investigate the problem. To address this, the host can register an <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> with the user agent, which specifies where reports of such failures should be delivered such that they can be investigated.</p></section><section id="reporting-of-first-party-subresource-fetch-failures" typeof="bibo:Chapter" resource="#reporting-of-first-party-subresource-fetch-failures" property="bibo:hasPart"><h4 id="h-reporting-of-first-party-subresource-fetch-failures" resource="#h-reporting-of-first-party-subresource-fetch-failures"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.6.2 </span>Reporting of First-party Subresource Fetch Failures</span></h4><p>A typical application requires dozens of resources, the fetching of which is typically initiated via HTML, CSS, or JavaScript. The application requesting such resources can observe failures of most such fetches (e.g. via <code>onerror</code> callbacks), but it does not have access to the detailed network error report of why the failure has occurred - e.g. DNS failure, TCP error, TLS protocol violation, etc.</p><p>To address this, the application can register relevant NEL policies with the user agent for the first-party hosts from which the subresources are being fetched. Then, if such a policy is present and a network error is encountered for a resource associated with a registered <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>, the user agent will report the detailed network error report and enable the application developers to investigate the error.</p></section><section id="reporting-of-third-party-subresource-fetch-failures" typeof="bibo:Chapter" resource="#reporting-of-third-party-subresource-fetch-failures" property="bibo:hasPart"><h4 id="h-reporting-of-third-party-subresource-fetch-failures" resource="#h-reporting-of-third-party-subresource-fetch-failures"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.6.3 </span>Reporting of Third-party Subresource Fetch Failures</span></h4><p>In the case where a resource is embedded by a third party, the provider of the resource is often unable to instrument and observe the failure. For example, if <code>example.com</code> embeds a <code>widget.com/thing.js</code> resource on its site, and the user visiting <code>example.com</code> fails to fetch such resource due to a network error, the <code>widget.com</code> host is both unaware of the failure and unable to detect it.</p><p>To address this, <code>widget.com</code> can register an NEL policy for its host. Then, if such policy is present and a network error is encountered while fetching a resource — regardless of whether it is being requested from a first-party or third-party origin — from the registered <a href="#dfn-nel-origin" class="internalDFN" data-link-type="dfn">NEL origin</a>, the user agent will report the network error and enable the provider to investigate the error.</p></section></section><section id="privacy-considerations" typeof="bibo:Chapter" resource="#privacy-considerations" property="bibo:hasPart"><h3 id="h-privacy-considerations" resource="#h-privacy-considerations"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.7 </span>Privacy Considerations</span></h3><p><a href="#dfn-nel" class="internalDFN" data-link-type="dfn">NEL</a> provides network error reports that could expose new information about the user's network configuration. For example, an attacker could abuse NEL reporting to probe users network configuration. Also, similar to HSTS, HPKP, and pinned CSP policies, the stored <a href="#dfn-nel-policy" class="internalDFN" data-link-type="dfn">NEL policy</a> could be used as a "supercookie" by setting a distinct policy with a custom (per-user) reporting URI to act as an identififer in combination with (or instead of) HTTP cookies.</p><p>To mitigate some of the above risks, NEL registration is restricted to <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">trustworthy origins</a>, and delivery of network error reports is similarly restricted to <a href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy">trustworthy origins</a>. This disallows a transient HTTP MITM from trivially abusing NEL as a persistent tracker.</p><p>In addition to above restrictions, the user agents <em class="rfc2119" title="MUST">MUST</em>:</p><ul>
+  <li>Clear the stored NEL policies when the user clears their browsing data (cookies, site data, history, etc).</li>
+  <li>Refuse to process Set-Cookie response headers when delivering network error reports.</li>
+</ul><p>When deploying NEL the developer <em class="rfc2119" title="SHOULD">SHOULD</em> consider privacy implications of NEL reports delivered to the specified collectors. For example, reports may contain URLs with sensitive data (e.g. "Capability URLs") that may need special precautions (see [<cite><a class="bibref" href="#bib-CAPABILITY-URLS">CAPABILITY-URLS</a></cite>]), and may require the developer to operate their own NEL collectors to prevent reporting of such URLs to third parties.</p></section><section id="iana-considerations" typeof="bibo:Chapter" resource="#iana-considerations" property="bibo:hasPart"><h3 id="h-iana-considerations" resource="#h-iana-considerations"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.8 </span>IANA Considerations</span></h3><p>The permanent message header field registry  should be updated with the following registrations ([<cite><a class="bibref" href="#bib-RFC3864">RFC3864</a></cite>]):</p><section id="nel" typeof="bibo:Chapter" resource="#nel" property="bibo:hasPart"><h4 id="h-nel" resource="#h-nel"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.8.1 </span>NEL</span></h4><dl>
+    <dt>Header field name</dt>
+    <dd>NEL</dd>
+    <dt>Applicable protocol</dt>
+    <dd>http</dd>
+    <dt>Status</dt>
+    <dd>standard</dd>
+    <dt>Author/Change controller</dt>
+    <dd><abbr title="World Wide Web Consortium">W3C</abbr></dd>
+    <dt>Specification document</dt>
+    <dd>This specification (see <a href="#dfn-nel-header-field" class="internalDFN" data-link-type="dfn">NEL Header Field</a>)</dd>
+  </dl></section></section></section><section class="appendix" id="acknowledgments" typeof="bibo:Chapter" resource="#acknowledgments" property="bibo:hasPart"><!--OddPage--><h2 id="h-acknowledgments" resource="#h-acknowledgments"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>Acknowledgments</span></h2><p></p><p></p><p>This document reuses text from the [<cite><a class="bibref" href="#bib-CSP">CSP</a></cite>] and [<cite><a class="bibref" href="#bib-RFC6797">RFC6797</a></cite>] specification, as permitted by the licenses of those specifications. Additionally, sincere thanks to Thomas Tuttle, Chris Bentzel, Todd Reifsteck, Aaron Heady, and Mark Nottingham for their helpful comments and contributions to this work.</p></section><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-CAPABILITY-URLS">[CAPABILITY-URLS]</dt><dd>Jeni Tennison. <a href="http://www.w3.org/TR/capability-urls/" property="dc:requires"><cite>Good Practices for Capability URLs</cite></a>. 18 February 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/capability-urls/" property="dc:requires">http://www.w3.org/TR/capability-urls/</a>
+</dd><dt id="bib-POWERFUL-FEATURES">[POWERFUL-FEATURES]</dt><dd>Mike West; Yan Zhu. <a href="http://www.w3.org/TR/powerful-features/" property="dc:requires"><cite>Privileged Contexts</cite></a>. 24 April 2015. W3C Working Draft. URL: <a href="http://www.w3.org/TR/powerful-features/" property="dc:requires">http://www.w3.org/TR/powerful-features/</a>
+</dd><dt id="bib-REFERRER-POLICY">[REFERRER-POLICY]</dt><dd>Jochen Eisinger; Mike West. <a href="http://www.w3.org/TR/referrer-policy/" property="dc:requires"><cite>Referrer Policy</cite></a>. 7 August 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/referrer-policy/" property="dc:requires">http://www.w3.org/TR/referrer-policy/</a>
+</dd><dt id="bib-RFC3986">[RFC3986]</dt><dd>T. Berners-Lee; R. Fielding; L. Masinter. <a href="https://tools.ietf.org/html/rfc3986" property="dc:requires"><cite>Uniform Resource Identifier (URI): Generic Syntax</cite></a>. January 2005. Internet Standard. URL: <a href="https://tools.ietf.org/html/rfc3986" property="dc:requires">https://tools.ietf.org/html/rfc3986</a>
+</dd><dt id="bib-RFC7230">[RFC7230]</dt><dd>R. Fielding, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7230" property="dc:requires">https://tools.ietf.org/html/rfc7230</a>
+</dd><dt id="bib-RFC7234">[RFC7234]</dt><dd>R. Fielding, Ed.; M. Nottingham, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7234" property="dc:requires"><cite>Hypertext Transfer Protocol (HTTP/1.1): Caching</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7234" property="dc:requires">https://tools.ietf.org/html/rfc7234</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-CSP">[CSP]</dt><dd>Brandon Sterne; Adam Barth. <a href="http://www.w3.org/TR/CSP1/" property="dc:references"><cite>Content Security Policy 1.0</cite></a>. 19 February 2015. W3C Note. URL: <a href="http://www.w3.org/TR/CSP1/" property="dc:references">http://www.w3.org/TR/CSP1/</a>
+</dd><dt id="bib-Fetch">[Fetch]</dt><dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/" property="dc:references"><cite>Fetch Standard</cite></a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/" property="dc:references">https://fetch.spec.whatwg.org/</a>
+</dd><dt id="bib-RFC1123">[RFC1123]</dt><dd>R. Braden, Ed.. <a href="https://tools.ietf.org/html/rfc1123" property="dc:references"><cite>Requirements for Internet Hosts - Application and Support</cite></a>. October 1989. Internet Standard. URL: <a href="https://tools.ietf.org/html/rfc1123" property="dc:references">https://tools.ietf.org/html/rfc1123</a>
+</dd><dt id="bib-RFC3864">[RFC3864]</dt><dd>G. Klyne; M. Nottingham; J. Mogul. <a href="https://tools.ietf.org/html/rfc3864" property="dc:references"><cite>Registration Procedures for Message Header Fields</cite></a>. September 2004. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc3864" property="dc:references">https://tools.ietf.org/html/rfc3864</a>
+</dd><dt id="bib-RFC4291">[RFC4291]</dt><dd>R. Hinden; S. Deering. <a href="https://tools.ietf.org/html/rfc4291" property="dc:references"><cite>IP Version 6 Addressing Architecture</cite></a>. February 2006. Draft Standard. URL: <a href="https://tools.ietf.org/html/rfc4291" property="dc:references">https://tools.ietf.org/html/rfc4291</a>
+</dd><dt id="bib-RFC6454">[RFC6454]</dt><dd>A. Barth. <a href="https://tools.ietf.org/html/rfc6454" property="dc:references"><cite>The Web Origin Concept</cite></a>. December 2011. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6454" property="dc:references">https://tools.ietf.org/html/rfc6454</a>
+</dd><dt id="bib-RFC6797">[RFC6797]</dt><dd>J. Hodges; C. Jackson; A. Barth. <a href="https://tools.ietf.org/html/rfc6797" property="dc:references"><cite>HTTP Strict Transport Security (HSTS)</cite></a>. November 2012. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6797" property="dc:references">https://tools.ietf.org/html/rfc6797</a>
+</dd><dt id="bib-RFC7159">[RFC7159]</dt><dd>T. Bray, Ed.. <a href="https://tools.ietf.org/html/rfc7159" property="dc:references"><cite>The JavaScript Object Notation (JSON) Data Interchange Format</cite></a>. March 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7159" property="dc:references">https://tools.ietf.org/html/rfc7159</a>
+</dd><dt id="bib-RFC7231">[RFC7231]</dt><dd>R. Fielding, Ed.; J. Reschke, Ed.. <a href="https://tools.ietf.org/html/rfc7231" property="dc:references"><cite>Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content</cite></a>. June 2014. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc7231" property="dc:references">https://tools.ietf.org/html/rfc7231</a>
+</dd><dt id="bib-URL">[URL]</dt><dd>Anne van Kesteren; Sam Ruby. <a href="http://www.w3.org/TR/url-1/" property="dc:references"><cite>URL</cite></a>. 9 December 2014. W3C Working Draft. URL: <a href="http://www.w3.org/TR/url-1/" property="dc:references">http://www.w3.org/TR/url-1/</a>
+</dd></dl></section></section>
+<script async="" defer="" src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
+</body></html>
