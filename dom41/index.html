@@ -1443,10 +1443,10 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a href="https://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"></a></p>
    <h1 class="p-name no-ref allcaps" id="title">W3C DOM 4.1</h1>
-   <h2 id="w3c-working-draft-09-june-2017"><abbr title="World Wide Web Consortium">W3C</abbr> Working Draft <time property="dcterms:issued" class="dt-published" datetime="2017-06-09">09 June 2017</time></h2>
+   <h2 id="w3c-working-draft-20-april-2017"><abbr title="World Wide Web Consortium">W3C</abbr> Working Draft <time property="dcterms:issued" class="dt-published" datetime="2017-04-20">20 April 2017</time></h2>
     <dl>
     <dt>This version:
-     <dd><a class="u-url" href="https://www.w3.org/TR/2017/WD-dom41-20170609/">https://www.w3.org/TR/2017/WD-dom41-20170609/</a>
+     <dd><a class="u-url" href="https://www.w3.org/TR/2017/WD-dom41-20170420/">https://www.w3.org/TR/2017/WD-dom41-20170420/</a>
      <dt>Latest published version:
      </dt><dd><a href="https://www.w3.org/TR/dom41/">https://www.w3.org/TR/dom41/</a>
      </dd><dt>Latest version of DOM:
@@ -1455,7 +1455,7 @@ pre.idl.highlight { color: #708090; }
      <dt>Editor's Draft:
      <dd><a href="https://w3c.github.io/dom/">https://w3c.github.io/dom/</a>
      <dt>Previous version:</dt>
-      <dd><a href="https://www.w3.org/TR/2017/WD-dom41-20170420/">https://www.w3.org/TR/2017/WD-dom41-20170420/</a></dd>
+      <dd><a href="https://www.w3.org/TR/2017/WD-dom41-20170321/">https://www.w3.org/TR/2017/WD-dom41-20170321/</a></dd>
      <dt class="editor">Editor:
      <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0" data-editor-id="94359"><a class="p-name fn u-email email" href="mailto:yongsheng.zys@alibaba-inc.com">Yongsheng Zhu</a> (<span class="p-org org">Alibaba</span>)
      <dt>Feedback:
@@ -1482,23 +1482,21 @@ pre.idl.highlight { color: #708090; }
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
-   <p> This is a public copy of the editors’ draft.
-  It is provided for discussion only and may change at any moment.
-  Its publication here does not imply endorsement of its contents by W3C.
-  Don’t cite this document other than as work in progress. </p>
-   <p> <strong>Changes to this document may be tracked at <a href="https://github.com/w3c/dom">https://github.com/w3c/dom</a>.</strong> </p>
-   <p> If you wish to make comments regarding this document, please send them to this specification’s <a href="https://github.com/w3c/dom">GitHub repository</a> or (<a href="https://lists.w3.org/Archives/Public/www-dom/">archived</a>) public mailing list <a href="mailto:https://www-dom@w3.org?Subject=%5Bdom41%5D%20PUT%20SUBJECT%20HERE">https://www-dom@w3.org</a> (see <a href="http://www.w3.org/Mail/Request">instructions</a>). When sending e-mail, please put the text “dom41” in the subject, preferably like this: “[dom41] <em>…summary of comment…</em>. All comments are welcome. </p>
-   <p> This document was produced by the <a href="https://www.w3.org/WebPlatform/WG/">Web Platform Working Group</a>. </p>
-   <p> This document was produced by a group operating under
-  the <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 W3C Patent Policy</a>.
-  W3C maintains a <a href="https://www.w3.org/2004/01/pp-impl/83482/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group;
-  that page also includes instructions for disclosing a patent.
-  An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section 6 of the W3C Patent Policy</a>. </p>
-   <p> This document is governed by the <a href="https://www.w3.org/2015/Process-20150901/" id="w3c_process_revision">1 September 2015 W3C Process Document</a>. </p>
-   <p></p>
-   <p>This document is the Second Public Working Draft of an update to the DOM 4 Recommendation.
-
-The goals of this revision are to update the W3C’s DOM specification to cover what is interoperably implemented as a core part of the Web Platform.</p>
+   <p> <em>This section describes the status of this document at the time of its publication. Other
+    documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this
+    technical report can be found in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical
+    reports index</a> at https://www.w3.org/TR/.</em> </p>
+    <p> This document was published by the <a href="https://www.w3.org/WebPlatform/WG/">Web Platform Working Group</a> as the Second Public Working Draft to the <a href="http://www.w3.org/TR/2015/REC-dom-20151119/">DOM 4 Recommendation</a>. This document is intended to become a W3C Recommendation.</p>
+   <p>The <a href="#historical-DOM-spec-history">goals of this revision</a> are to update the W3C’s DOM specification to cover what is interoperably implemented as a core part of the Web Platform.</p>
+   <p>
+  If you wish to make comments regarding this document, please <a href="https://github.com/w3c/dom/issues/new">file an issue</a> to this specification's <a href="https://github.com/w3c/dom">GitHub repository</a>. If you cannot do this, you may send it to <a href="mailto:www-dom@w3.org?subject=%5Bhtml%5D%20YOUR%20TOPIC%20HERE">www-dom@w3.org</a> (<a href="https://lists.w3.org/Archives/Public/www-dom/">archived</a>, see <a href="http://www.w3.org/Mail/Request">instructions</a>) with subject line “<kbd>[dom41] <i data-lt="">… message topic …</i></kbd>”. All comments are welcome.
+  <p>Publication as a Working Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress.</p>
+  <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/83482/status" rel="disclosure">public list of any
+    patent disclosures</a> made in connection with the deliverables of the group; that page also
+    includes instructions for disclosing a patent. An individual who has actual knowledge of a
+    patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+    Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
+   <p> This document is governed by the <a href="https://www.w3.org/2017/Process-20170301/" id="w3c_process_revision">1 March 2017 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>. </p>
   </div>
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
@@ -5948,9 +5946,6 @@ and false otherwise. </p>
     <h3 class="heading settled" data-level="8.1" id="historical-changes-wd3-wd2"><span class="secno">8.1. </span><span class="content">Changes between this draft and the <a href="https://www.w3.org/TR/2017/WD-dom41-20170420/">2nd Working Draft of DOM 4.1</a></span><a class="self-link" href="#historical-changes-wd3-wd2"></a></h3>
     <dl>
      <dt><a href="https://github.com/w3c/dom/commit/64e26b88607b4b49e2c0b9d1207e88569e4a85a5">Use a single concept for attribute change steps of Element</a> 
-     <dt><a href="https://github.com/w3c/dom/commit/271987a0246b7b3ff89067b28cb5405d7bdcaec2">Updates to Event</a> 
-     <dd>added <code>EventListernerOptions</code>/<code>AddEventListenerOptions</code>, and make some changes to the steps of dispatching events, and
-     <dd>imported realm from ES standard to ensure security
      <dt><a href="https://github.com/w3c/dom/commit/f21beacd2fe64f5070b4fa86446122d4fc45eafd">Changes to Sets</a> 
      <dd>define token set for <code>DOMTokenList</code>, and
      <dd>define <code>supports()</code> for <code>DOMTokenList</code>, and
@@ -5971,7 +5966,10 @@ and false otherwise. </p>
      <dt><a href="https://github.com/w3c/dom/commit/f39a74823121ae7d310235e4ce1c9036cd898c5d">Clean up the unsupported events in the createEvent interface</a> 
      <dt><a href="https://github.com/w3c/dom/commit/21948b572ca6767fe628893b123907d4b1779fdb">Improve the insertion/removing steps for descendants</a> 
      <dt><a href="https://github.com/w3c/dom/commit/f2dee6ec1adcad5c2a9bb1c49f95b1a7c96af5f3">Use previousSibling in the replacing a node algorithm</a> 
-     <dt><a href="https://github.com/w3c/dom/commit/f2dee6ec1adcad5c2a9bb1c49f95b1a7c96af5f3">Update the HTMLCollection algorithm in node</a> 
+     <dt><a href="https://github.com/w3c/dom/commit/f2dee6ec1adcad5c2a9bb1c49f95b1a7c96af5f3">Update the HTMLCollection algorithm in node</a>
+     <dt><a href="https://github.com/w3c/dom/commit/271987a0246b7b3ff89067b28cb5405d7bdcaec2">Updates to Event</a> 
+     <dd>added <code>EventListernerOptions</code>/<code>AddEventListenerOptions</code>, and make some changes to the steps of dispatching events, and
+     <dd>imported realm from ES standard to ensure security</dd>
     </dl>
     <h3 class="heading settled" data-level="8.2" id="historical-changes-wd2-fpwd"><span class="secno">8.2. </span><span class="content">Changes between the <a href="https://www.w3.org/TR/2017/WD-dom41-20170420/">2nd Working Draft of DOM 4.1</a> and the <a href="https://www.w3.org/TR/2017/WD-dom41-20170321/">First Public Working Draft of DOM 4.1</a>.</span><a class="self-link" href="#historical-changes-wd2-fpwd"></a></h3>
     <dl>
