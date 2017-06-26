@@ -1637,7 +1637,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         </code> attribute.</p>
 
       <p>All <code><a href="#dfn-itemref" class="internalDFN" data-link-type="dfn"><code>itemref</code></a>
-        </code> attributes in a <code>Document</code> must be such that there are no cycles in the graph formed from representing each <a data-lt="concept item" href="#dfn-item" class="internalDFN" data-link-type="dfn">item</a> in the <code>Document</code> as a node in the graph and each <a lt="item properties" href="#dfn-property" class="internalDFN" data-link-type="dfn">property</a> of an item whose
+        </code> attributes in a <code>Document</code> must be such that there are no cycles in the graph formed from representing each <a data-lt="concept item" href="#dfn-item" class="internalDFN" data-link-type="dfn">item</a> in the <code>Document</code> as a node in the graph and each <a data-lt="item properties" href="#dfn-property" class="internalDFN" data-link-type="dfn">property</a> of an item whose
         <a data-lt="property value" href="#dfn-value" class="internalDFN" data-link-type="dfn">value</a> is another item as an edge in the graph connecting those two items.</p>
 
       <!-- removed redundant requirement from above. But does this requirement serve any purpose? -->
@@ -1946,10 +1946,12 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         <dt><a href="#dfn-itemtype" class="internalDFN" data-link-type="dfn"><code>itemtype</code></a></dt>
         <dd>This is a list of <a data-lt="absolute URL" href="#dfn-absolute-url" class="internalDFN" data-link-type="dfn">absolute URLs</a> that identify an <a href="#dfn-item" class="internalDFN" data-link-type="dfn">item</a> within a particular vocabulary.</dd>
         <dd>The <a href="#dfn-itemtype" class="internalDFN" data-link-type="dfn"><code>itemtype</code></a> attribute must not be specified on elements that do not have an <a href="#dfn-itemscope" class="internalDFN" data-link-type="dfn"><code>itemscope</code></a> attribute.</dd>
+        <dd>
         <div class="note">
           <div class="note-title marker" aria-level="4" role="heading" id="h-note5"><span>Note</span></div>
-          <dd class="">This attribute performs a function similar to the combination of <code>vocab</code> and <code>typeof</code> attributes in [<cite><a class="bibref" href="#bib-rdfa-core">rdfa-core</a></cite>].</dd>
+          <dd class="">This attribute performs a function similar to the combination of <code>vocab</code> and <code>typeof</code> attributes in [<cite><a class="bibref" href="#bib-rdfa-core">rdfa-core</a></cite>].
         </div>
+        </dd>
 
         <dt><a href="#dfn-itemprop" class="internalDFN" data-link-type="dfn"><code>itemprop</code></a></dt>
         <dd>When present on an element, it identifies that the element provides the <a href="#dfn-value" class="internalDFN" data-link-type="dfn">property value</a> of the <a href="#dfn-item" class="internalDFN" data-link-type="dfn">item</a> in which it appears, and the attribute's value defines the <a href="#dfn-property-names" class="internalDFN" data-link-type="dfn">property name</a>.</dd>
